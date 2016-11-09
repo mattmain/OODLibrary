@@ -705,11 +705,7 @@ public class Library implements Serializable {
 	}
 
 	public Iterator<LoanableItem> getBooksNotBorrowed() {
-		Iterator<LoanableItem> booksNotBorrowed = catalog.getBooksNotBorrowed();
-		if (booksNotBorrowed == null) {
-			return (null);
-		}
-		return booksNotBorrowed;
+		return catalog.getBooksNotBorrowed();
 	}
 
 	public Iterator<LoanableItem> getOverDueItems() {
