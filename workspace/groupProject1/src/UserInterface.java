@@ -43,9 +43,9 @@ public class UserInterface {
 	private static final int ADD_MEMBER = 1;
 	private static final int ADD_BOOKS = 2;
 	private static final int ISSUE_BOOKS = 3;
-	private static final int RETURN_BOOKS = 4;
+	private static final int RETURN_ITEMS = 4;
 	private static final int RENEW_BOOKS = 5;
-	private static final int REMOVE_BOOKS = 6;
+	private static final int REMOVE_ITEMS = 6;
 	private static final int PLACE_HOLD = 7;
 	private static final int REMOVE_HOLD = 8;
 	private static final int PROCESS_HOLD = 9;
@@ -201,9 +201,9 @@ public class UserInterface {
 		System.out.println(ADD_MEMBER + " to add a member");
 		System.out.println(ADD_BOOKS + " to  add books");
 		System.out.println(ISSUE_BOOKS + " to  issue books to a  member");
-		System.out.println(RETURN_BOOKS + " to  return books ");
+		System.out.println(RETURN_ITEMS + " to  return books ");
 		System.out.println(RENEW_BOOKS + " to  renew books ");
-		System.out.println(REMOVE_BOOKS + " to  remove books");
+		System.out.println(REMOVE_ITEMS + " to  remove items");
 		System.out.println(PLACE_HOLD + " to  place a hold on a book");
 		System.out.println(REMOVE_HOLD + " to  remove a hold on a book");
 		System.out.println(PROCESS_HOLD + " to  process holds");
@@ -365,8 +365,8 @@ public class UserInterface {
 	public void returnLoanableItems() {
 		int result;
 		do {
-			String bookID = getToken("Enter book id");
-			result = library.returnLoanableItem(bookID);
+			String itemID = getToken("Enter item id");
+			result = library.returnLoanableItem(itemID);
 			switch (result) {
 			case Library.ITEM_NOT_FOUND:
 				System.out.println("No such Book in Library");
@@ -654,10 +654,10 @@ public class UserInterface {
 			case ISSUE_BOOKS:
 				issueLoanableItems();
 				break;
-			case RETURN_BOOKS:
+			case RETURN_ITEMS:
 				returnLoanableItems();
 				break;
-			case REMOVE_BOOKS:
+			case REMOVE_ITEMS:
 				removeLoanableItems();
 				break;
 			case RENEW_BOOKS:
