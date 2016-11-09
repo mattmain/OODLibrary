@@ -30,6 +30,7 @@ import java.util.List;
  */
 public class Catalog extends ItemList<LoanableItem, String> {
 	private static Catalog catalog;
+	private MemberList memberList;
 
 	/*
 	 * Private constructor for singleton pattern
@@ -194,4 +195,10 @@ public class Catalog extends ItemList<LoanableItem, String> {
 
 		return borrowedItems.iterator();
 	}
+	
+	public LoanableItem search(String itemId) {
+		return super.search(itemId);
+	}
+
+
 }

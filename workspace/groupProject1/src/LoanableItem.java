@@ -175,7 +175,7 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 
 	}
 
-	public int calculateFine() {
+	public calculateFine() {
 		return 0;
 	}
 }

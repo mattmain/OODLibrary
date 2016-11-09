@@ -40,6 +40,7 @@ public class Member implements Serializable, Matchable<String> {
 	private List<LoanableItem> booksBorrowed = new LinkedList<LoanableItem>();
 	private List<Hold> booksOnHold = new LinkedList<Hold>();
 	private List<Transaction> transactions = new LinkedList<Transaction>();
+	private double fine = 0;
 
 	/**
 	 * Creates a single member
@@ -325,6 +326,7 @@ public class Member implements Serializable, Matchable<String> {
 	 * @return true is successful, else false.
 	 */
 	public boolean returnItem(LoanableItem loanableItem) {
+		fine+ = loanableItem.calculateFine();
 		loanableItem.returnItem();
 		booksBorrowed.remove(loanableItem);
 		return true;
