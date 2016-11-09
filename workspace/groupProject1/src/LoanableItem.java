@@ -176,6 +176,14 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 	}
 
 	public int calculateFine() {
-		return 0;
+		int dueDate = (int) (this.dueDate.getTimeInMillis() / 86400000);
+		int currentDay = (int) (System.currentTimeMillis() / 86400000);
+		int difference = currentDay - dueDate;
+		double fine = 0;
+		if (difference > 0) {
+			fine = .10 + (difference - 1) * .05;
+		}
+
+		return fine;
 	}
 }
