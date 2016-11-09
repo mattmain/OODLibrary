@@ -132,6 +132,13 @@ public class Member implements Serializable, Matchable<String> {
 		return (booksOnHold.listIterator());
 	}
 
+public Boolean hasHolds(){
+	if(booksOnHold.size() == 0){
+		return false;
+		
+	}
+	return true;
+}
 	/**
 	 * Places a hold for the book
 	 * 
@@ -326,7 +333,7 @@ public class Member implements Serializable, Matchable<String> {
 	 * @return true is successful, else false.
 	 */
 	public boolean returnItem(LoanableItem loanableItem) {
-		fine+ = loanableItem.calculateFine();
+		fine += loanableItem.calculateFine();
 		loanableItem.returnItem();
 		booksBorrowed.remove(loanableItem);
 		return true;
@@ -347,5 +354,11 @@ public class Member implements Serializable, Matchable<String> {
 
 		return (booksWithHolds.iterator());
 
+	}
+	public boolean hasFines() {
+		if(fine > 0){
+			return true;
+		}
+		return false;
 	}
 }

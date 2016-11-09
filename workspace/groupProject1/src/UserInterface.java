@@ -57,7 +57,7 @@ public class UserInterface {
 	private static final int SET_DUE_DATE = 16;
 	private static final int MOVE_TO_RESERVED = 17;
 	private static final int HELP = 18;
-
+	private static final int REMOVE_MEMBER = 14;
 	/**
 	 * Made private for singleton pattern. Conditionally looks for any saved
 	 * data. Otherwise, it gets a singleton Library object.
@@ -234,7 +234,40 @@ public class UserInterface {
 		}
 		System.out.println(result);
 	}
+	public void removeMember(){
+		int memSeqNum = 0;
+		do {
+			Iterator members = library.getMembers();
+			memSeqNum = getSeqNum(members);
+			if (memSeqNum != -1) {
+				break;
+			} else {
+				int result = library.removeMember(memSeqNum);
 
+				if (result == library.MEMBER_NOT_FOUND) {
+					System.out.println("MEMBER_NOT_FOUND");
+					removeLoanableItems();
+				}
+				if (result == library.MEMBER_HAS_HOLD) {
+					System.out.println("MEMBER_HAS_HOLD");
+					removeLoanableItems();
+				}
+				if (result == library.MEMBER_REMOVED) {
+					System.out.println("MEMBER_REMOVED");
+					removeLoanableItems();
+				}
+				if (result == library.OPERATION_COMPLETED) {
+					System.out.println("OPERATION_COMPLETED");
+					if (!yesOrNo("Remove more books?")) {
+						process();
+					} else {
+						System.out.println("OPERATION_FAILED");
+						removeMember();
+					}
+				}
+			}
+		} while (true);
+	}
 	/**
 	 * Method to be called for adding a loanable item. Prompts the user for the
 	 * appropriate values and uses the appropriate Library method for adding the

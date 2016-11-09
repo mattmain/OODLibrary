@@ -47,6 +47,10 @@ public class Library implements Serializable {
 
 	public static final int BOOK = 1;
 	public static final int PERIODICAL = 2;
+	public static final int MEMBER_NOT_FOUND = 11;
+	public static final int MEMBER_HAS_HOLD = 12;
+	public static final int MEMBER_REMOVED = 13;
+	public static final int MEMBER_HAS_FINES = 14;
 	private Catalog catalog;
 	private MemberList memberList;
 	private static Library library;
@@ -115,7 +119,19 @@ public class Library implements Serializable {
 		}
 		return null;
 	}
-
+	public int removeMember(int memSeqNum){
+		Iterator<Member> memIterator = memberList.iterator();
+		Member member = null;
+		while(memIterator.hasNext()){
+			member = memIterator.next();
+		}
+		//if(member.matches(memberId))
+		if(memberList.removeMember(member)){
+			
+			return (0);
+		}
+		return 0;
+	}
 	/**
 	 * Organizes the placing of a hold
 	 * 
