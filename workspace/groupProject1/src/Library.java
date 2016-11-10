@@ -47,12 +47,17 @@ public class Library implements Serializable {
 
 	public static final int BOOK = 1;
 	public static final int PERIODICAL = 2;
+	public static final int DVD = 3;
+	public static final int CAMERA = 4;
+	public static final int LAPTOP = 5;
+
 	public static final int MEMBER_NOT_FOUND = 11;
 	public static final int MEMBER_HAS_HOLD = 12;
 	public static final int MEMBER_REMOVED = 13;
 	public static final int MEMBER_HAS_FINES = 14;
 	public static final int EXIT = 15;
 	private Catalog catalog;
+	private ReservedSection reservedSection;
 	private MemberList memberList;
 	private static Library library;
 
@@ -63,6 +68,7 @@ public class Library implements Serializable {
 	private Library() {
 		catalog = Catalog.instance();
 		memberList = MemberList.instance();
+		reservedSection = ReservedSection.instance();
 	}
 
 	/**
@@ -121,33 +127,31 @@ public class Library implements Serializable {
 		return null;
 	}
 
-
-	
-	
-	public int removeMember(int memSeqNum){
+	public int removeMember(int memSeqNum) {
 		Iterator<Member> memIterator = memberList.iterator();
 		Member member = null;
-		if(memSeqNum == -1){
+		if (memSeqNum == -1) {
 			System.out.println("exiting back to menu");
 			return EXIT;
 		}
-		for(int i = 0; i <= memSeqNum; i++){
+		for (int i = 0; i <= memSeqNum; i++) {
 			member = memIterator.next();
 		}
-		if(member == null){
+		if (member == null) {
 			return (MEMBER_NOT_FOUND);
 		}
-		if(member.hasHolds()){
+		if (member.hasHolds()) {
 			return (MEMBER_HAS_HOLD);
 		}
-		if(member.hasFines()){
+		if (member.hasFines()) {
 			return (MEMBER_HAS_FINES);
 		}
-		if(memberList.removeMember(member)){
+		if (memberList.removeMember(member)) {
 			return OPERATION_COMPLETED;
 		}
 		return OPERATION_FAILED;
 	}
+
 	/**
 	 * Organizes the placing of a hold
 	 * 
@@ -757,10 +761,10 @@ public class Library implements Serializable {
 
 	}
 
-	public String moveToReserved(int bookID) {
-
-		return null;
-
+	public void moveToReserved(String bookID) {
+		Book book = (Book) catalog.search(bookID);
+		catalog.remove(book);
+		reservedSection.add(book);
 	}
 
 }

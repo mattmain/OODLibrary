@@ -19,6 +19,8 @@ public class LoanableItemFactory {
 		switch (type) {
 		case BOOK:
 			return new Book(title, author, id);
+		case PERIODICAL:
+			return new Periodical();
 			// case PERIODICAL:
 			// return new Periodical(title, id);
 		default:

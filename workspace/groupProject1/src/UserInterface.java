@@ -42,9 +42,9 @@ public class UserInterface {
 	private static final int EXIT = 0;
 	private static final int ADD_MEMBER = 1;
 	private static final int ADD_BOOKS = 2;
-	private static final int ISSUE_BOOKS = 3;
+	private static final int ISSUE_ITEMS = 3;
 	private static final int RETURN_ITEMS = 4;
-	private static final int RENEW_BOOKS = 5;
+	private static final int RENEW_ITEMS = 5;
 	private static final int REMOVE_ITEMS = 6;
 	private static final int PLACE_HOLD = 7;
 	private static final int REMOVE_HOLD = 8;
@@ -242,10 +242,10 @@ public class UserInterface {
 		do {
 			Iterator<Member> members = library.getMembers();
 			memSeqNum = getSeqNum(members);
-		
+
 			int result = library.removeMember(memSeqNum);
 
-			if(result == Library.EXIT){
+			if (result == Library.EXIT) {
 				process();
 			}
 			if (result == Library.MEMBER_NOT_FOUND) {
@@ -269,7 +269,7 @@ public class UserInterface {
 					removeMember();
 				}
 			}
-			
+
 		} while (true);
 	}
 
@@ -740,21 +740,18 @@ public class UserInterface {
 
 	private void moveToReserved() {
 		Iterator<LoanableItem> books = library.getBooks();
-		int bookID = -1;
+		String bookID = null;
 		while (books.hasNext()) {
 			System.out.println(books.toString());
 		}
 
 		try {
-			bookID = Integer
-					.parseInt(getToken("Enter an ID of a book to move or -1 to cancel."));
+			bookID = getToken("Enter an ID of a book to move or -1 to cancel.");
 		} catch (Exception e) {
 			System.out.println("You did not enter a number");
 		}
-
-		String result = library.moveToReserved(bookID);
-
-		System.out.println(result);
+		library.moveToReserved(bookID);
+		System.out.println("Book has been moved to the reserved section");
 
 	}
 

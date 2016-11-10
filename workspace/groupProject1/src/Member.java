@@ -37,7 +37,7 @@ public class Member implements Serializable, Matchable<String> {
 	private String phone;
 	private String id;
 	private static final String MEMBER_STRING = "M";
-	private List<LoanableItem> booksBorrowed = new LinkedList<LoanableItem>();
+	private List<LoanableItem> itemsBorrowed = new LinkedList<LoanableItem>();
 	private List<Hold> booksOnHold = new LinkedList<Hold>();
 	private List<Transaction> transactions = new LinkedList<Transaction>();
 	private double fine = 0;
@@ -68,7 +68,7 @@ public class Member implements Serializable, Matchable<String> {
 	 *         currently
 	 */
 	public boolean issue(LoanableItem item) {
-		if (booksBorrowed.add(item)) {
+		if (itemsBorrowed.add(item)) {
 			System.out.println("Item Tittle Issued:" + item.getTitle());
 			transactions.add(new Transaction("Item issued ", item.getTitle()));
 			return true;
@@ -84,7 +84,7 @@ public class Member implements Serializable, Matchable<String> {
 	 * @return true iff the book could be marked as marked as returned
 	 */
 	public boolean returnBook(Book book) {
-		if (booksBorrowed.remove(book)) {
+		if (itemsBorrowed.remove(book)) {
 			transactions
 					.add(new Transaction("Book returned ", book.getTitle()));
 			return true;
@@ -101,7 +101,7 @@ public class Member implements Serializable, Matchable<String> {
 	 */
 	public boolean renew(LoanableItem item) {
 
-		for (ListIterator<LoanableItem> iterator = booksBorrowed.listIterator(); iterator
+		for (ListIterator<LoanableItem> iterator = itemsBorrowed.listIterator(); iterator
 				.hasNext();) {
 			Book aBook = (Book) iterator.next();
 			String id = aBook.getId();
@@ -120,7 +120,7 @@ public class Member implements Serializable, Matchable<String> {
 	 * @return Iterator to the collection of issued books
 	 */
 	public Iterator<LoanableItem> getBooksIssued() {
-		return (booksBorrowed.listIterator());
+		return (itemsBorrowed.listIterator());
 	}
 
 	/**
@@ -132,13 +132,14 @@ public class Member implements Serializable, Matchable<String> {
 		return (booksOnHold.listIterator());
 	}
 
-public Boolean hasHolds(){
-	if(booksOnHold.size() == 0){
-		return false;
-		
+	public Boolean hasHolds() {
+		if (booksOnHold.size() == 0) {
+			return false;
+
+		}
+		return true;
 	}
-	return true;
-}
+
 	/**
 	 * Places a hold for the book
 	 * 
@@ -233,7 +234,7 @@ public Boolean hasHolds(){
 	}
 
 	public List<LoanableItem> getListOfBooks() {
-		return booksBorrowed;
+		return itemsBorrowed;
 	}
 
 	/**
@@ -286,7 +287,7 @@ public Boolean hasHolds(){
 		String string = "Member name " + name + " address " + address + " id "
 				+ id + "phone " + phone;
 		string += " borrowed: [";
-		for (Iterator<LoanableItem> iterator = booksBorrowed.iterator(); iterator
+		for (Iterator<LoanableItem> iterator = itemsBorrowed.iterator(); iterator
 				.hasNext();) {
 			LoanableItem item = iterator.next();
 			string += " " + item.getTitle();
@@ -323,7 +324,7 @@ public Boolean hasHolds(){
 	 * @return Iterator <LoanableItem>
 	 */
 	public Iterator<LoanableItem> getLoanableItemsIssued() {
-		return booksBorrowed.iterator();
+		return itemsBorrowed.iterator();
 	}
 
 	/**
@@ -335,13 +336,13 @@ public Boolean hasHolds(){
 	public boolean returnItem(LoanableItem loanableItem) {
 		fine += loanableItem.calculateFine();
 		loanableItem.returnItem();
-		booksBorrowed.remove(loanableItem);
+		itemsBorrowed.remove(loanableItem);
 		return true;
 	}
 
 	public Iterator<LoanableItem> getBooksIssuedWithHolds() {
 		List<LoanableItem> booksWithHolds = new LinkedList();
-		Iterator<LoanableItem> iterator = booksBorrowed.iterator();
+		Iterator<LoanableItem> iterator = itemsBorrowed.iterator();
 
 		while (iterator.hasNext()) {
 
@@ -355,12 +356,14 @@ public Boolean hasHolds(){
 		return (booksWithHolds.iterator());
 
 	}
+
 	public boolean hasFines() {
-		if(fine > 0){
+		if (fine > 0) {
 			return true;
 		}
 		return false;
 	}
+
 	public boolean isRemovable(Member member) {
 
 		if (member.hasHolds() || member.hasFines()) {
@@ -369,5 +372,26 @@ public Boolean hasHolds(){
 		}
 		return true;
 
+	}
+
+	public boolean hasReservedBook() {
+		Iterator<LoanableItem> borrowedItems = itemsBorrowed.iterator();
+		while(borrowedItems.hasNext()){
+			if(borrowedItems.next() instanceof ReservedBook){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasCamera() {
+		Iterator<LoanableItem> borrowedItems = itemsBorrowed.iterator();
+		while(borrowedItems.hasNext()){
+			if(borrowedItems.next() instanceof Camera){
+				return true;
+			}
+		}
+		return false;
+	}
 	}
 }

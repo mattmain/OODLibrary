@@ -31,7 +31,7 @@ public class Book extends LoanableItem implements Serializable,
 		Matchable<String> {
 	private static final long serialVersionUID = 1L;
 	private String author;
-	private GregorianCalendar dueDate = new GregorianCalendar();
+	protected GregorianCalendar dueDate = new GregorianCalendar();
 	// private String borrowedBy = "";
 	private boolean borrowed = false;
 	private boolean hasHold = false;

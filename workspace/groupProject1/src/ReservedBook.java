@@ -1,3 +1,5 @@
+import java.util.Calendar;
+
 public class ReservedBook extends Book {
 
 	private int hourlyFine = 1;
@@ -8,10 +10,10 @@ public class ReservedBook extends Book {
 	}
 
 	@Override
-	public int calculateFine() {
-		int hours = (int) (System.currentTimeMillis() / 3600000);
-		int hourDue = (int) ((this.getDueDate().getTimeInMillis()) / 3600000);
-		int difference = hours - hourDue;
+	public double calculateFine() {
+		double hours = System.currentTimeMillis() / 3600000;
+		double hourDue = getDueDate().getTimeInMillis() / 3600000;
+		int difference = (int) Math.ceil(hours - hourDue);
 		if (difference > 0) {
 			return difference * hourlyFine;
 		}
@@ -22,6 +24,18 @@ public class ReservedBook extends Book {
 	public void placeHold(Hold hold) {
 		String result = "Unable to place a hold on a reserved item.";
 		System.out.println(result);
+	}
+
+	@Override
+	public boolean issue(Member member) {
+		if (member.hasReservedBook()) {
+			return false;
+		}
+		if (super.issue(member)) {
+			dueDate.add(Calendar.HOUR, 2);
+			return true;
+		}
+		return false;
 	}
 
 }
