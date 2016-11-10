@@ -361,4 +361,13 @@ public Boolean hasHolds(){
 		}
 		return false;
 	}
+	public boolean isRemovable(Member member) {
+
+		if (member.hasHolds() || member.hasFines()) {
+			return false;
+
+		}
+		return true;
+
+	}
 }

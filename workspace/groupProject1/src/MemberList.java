@@ -73,19 +73,23 @@ public class MemberList extends ItemList<Member, String> {
 	public boolean insertMember(Member member) {
 		return super.add(member);
 	}
-	public boolean removeMember(Member member){
-		return super.remove(member);
-	}
 
-	public boolean isRemovable(Member member) {
-
-		if (member.hasHolds() || member.hasFines()) {
-			return false;
-
+	public boolean removeMember(Member member) {
+		if (member.isRemovable(member)) {
+			return super.remove(member);
 		}
-		return true;
-
+		return false;
 	}
+
+//	public boolean isRemovable(Member member) {
+//
+//		if (member.hasHolds() || member.hasFines()) {
+//			return false;
+//
+//		}
+//		return true;
+//
+//	}
 	/*
 	 * Supports serialization
 	 * 

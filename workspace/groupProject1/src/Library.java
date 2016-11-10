@@ -51,6 +51,7 @@ public class Library implements Serializable {
 	public static final int MEMBER_HAS_HOLD = 12;
 	public static final int MEMBER_REMOVED = 13;
 	public static final int MEMBER_HAS_FINES = 14;
+	public static final int EXIT = 15;
 	private Catalog catalog;
 	private MemberList memberList;
 	private static Library library;
@@ -119,18 +120,33 @@ public class Library implements Serializable {
 		}
 		return null;
 	}
+
+
+	
+	
 	public int removeMember(int memSeqNum){
 		Iterator<Member> memIterator = memberList.iterator();
 		Member member = null;
-		while(memIterator.hasNext()){
+		if(memSeqNum == -1){
+			System.out.println("exiting back to menu");
+			return EXIT;
+		}
+		for(int i = 0; i <= memSeqNum; i++){
 			member = memIterator.next();
 		}
-		//if(member.matches(memberId))
-		if(memberList.removeMember(member)){
-			
-			return (0);
+		if(member == null){
+			return (MEMBER_NOT_FOUND);
 		}
-		return 0;
+		if(member.hasHolds()){
+			return (MEMBER_HAS_HOLD);
+		}
+		if(member.hasFines()){
+			return (MEMBER_HAS_FINES);
+		}
+		if(memberList.removeMember(member)){
+			return OPERATION_COMPLETED;
+		}
+		return OPERATION_FAILED;
 	}
 	/**
 	 * Organizes the placing of a hold
