@@ -197,7 +197,7 @@ public class UserInterface {
 	 */
 	public void help() {
 		System.out
-				.println("Enter a number between 0 and 12 as explained below:");
+				.println("Enter a number between 0 and 18 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
 		System.out.println(ADD_MEMBER + " to add a member");
 		System.out.println(ADD_BOOKS + " to  add books");
@@ -212,6 +212,7 @@ public class UserInterface {
 		System.out.println(SAVE + " to  save data");
 		System.out.println(RETRIEVE + " to  retrieve");
 		System.out.println(PRINT_FORMATTED + " to  print items formatted");
+		System.out.println(REMOVE_MEMBER + " to remove a member");
 		System.out.println(GET_OVERDUE_ITEMS
 				+ "  to print list of overdue items");
 		System.out.println(SET_DUE_DATE + "  to chage the due date of an item");
@@ -239,35 +240,36 @@ public class UserInterface {
 	public void removeMember() {
 		int memSeqNum = 0;
 		do {
-			Iterator members = library.getMembers();
+			Iterator<Member> members = library.getMembers();
 			memSeqNum = getSeqNum(members);
-			if (memSeqNum != -1) {
-				break;
-			} else {
-				int result = library.removeMember(memSeqNum);
+		
+			int result = library.removeMember(memSeqNum);
 
-				if (result == library.MEMBER_NOT_FOUND) {
-					System.out.println("MEMBER_NOT_FOUND");
-					removeLoanableItems();
-				}
-				if (result == library.MEMBER_HAS_HOLD) {
-					System.out.println("MEMBER_HAS_HOLD");
-					removeLoanableItems();
-				}
-				if (result == library.MEMBER_REMOVED) {
-					System.out.println("MEMBER_REMOVED");
-					removeLoanableItems();
-				}
-				if (result == library.OPERATION_COMPLETED) {
-					System.out.println("OPERATION_COMPLETED");
-					if (!yesOrNo("Remove more books?")) {
-						process();
-					} else {
-						System.out.println("OPERATION_FAILED");
-						removeMember();
-					}
+			if(result == Library.EXIT){
+				process();
+			}
+			if (result == Library.MEMBER_NOT_FOUND) {
+				System.out.println("MEMBER_NOT_FOUND");
+				removeMember();
+			}
+			if (result == Library.MEMBER_HAS_HOLD) {
+				System.out.println("MEMBER_HAS_HOLD");
+				removeMember();
+			}
+			if (result == Library.MEMBER_HAS_FINES) {
+				System.out.println("MEMBER_HAS_FINES");
+				removeMember();
+			}
+			if (result == Library.OPERATION_COMPLETED) {
+				System.out.println("OPERATION_COMPLETED");
+				if (!yesOrNo("Remove another member?")) {
+					process();
+				} else {
+					System.out.println("OPERATION_FAILED");
+					removeMember();
 				}
 			}
+			
 		} while (true);
 	}
 
@@ -346,7 +348,6 @@ public class UserInterface {
 	}
 
 	/**
-	 * Method to be called for renewing books. Prompts the user for the
 	 * appropriate values and uses the appropriate Library method for renewing
 	 * books.
 	 * 
@@ -728,6 +729,8 @@ public class UserInterface {
 				break;
 			case MOVE_TO_RESERVED:
 				moveToReserved();
+			case REMOVE_MEMBER:
+				removeMember();
 			case HELP:
 				help();
 				break;
