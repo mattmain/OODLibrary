@@ -27,7 +27,9 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 		this.id = id;
 		holds = new LinkedList();
 	}
-
+	protected LoanableItem(String id){
+		this.id = id;
+	}
 	/**
 	 * Issue an item to a member
 	 * 
