@@ -290,8 +290,20 @@ public class Member implements Serializable, Matchable<String> {
 		for (Iterator<LoanableItem> iterator = itemsBorrowed.iterator(); iterator
 				.hasNext();) {
 			LoanableItem item = iterator.next();
-			string += " " + item.getTitle();
+			if (item instanceof Book || item instanceof DVD
+					|| item instanceof Periodical) {
+				string += " " + item.getTitle();
+			}
+			if (item instanceof DigitalCamera) {
+				DigitalCamera camera = (DigitalCamera) item;
+				string += " " + camera.getBrand();
+			}
+			if (item instanceof Laptop) {
+				Laptop laptop = (Laptop) item;
+				string += " " + laptop.getBrand();
+			}
 		}
+
 		string += "] holds: [";
 		for (Iterator<Hold> iterator = booksOnHold.iterator(); iterator
 				.hasNext();) {
@@ -341,7 +353,7 @@ public class Member implements Serializable, Matchable<String> {
 	}
 
 	public Iterator<LoanableItem> getBooksIssuedWithHolds() {
-		List<LoanableItem> booksWithHolds = new LinkedList();
+		List<LoanableItem> booksWithHolds = new LinkedList<LoanableItem>();
 		Iterator<LoanableItem> iterator = itemsBorrowed.iterator();
 
 		while (iterator.hasNext()) {
@@ -376,8 +388,8 @@ public class Member implements Serializable, Matchable<String> {
 
 	public boolean hasReservedBook() {
 		Iterator<LoanableItem> borrowedItems = itemsBorrowed.iterator();
-		while(borrowedItems.hasNext()){
-			if(borrowedItems.next() instanceof ReservedBook){
+		while (borrowedItems.hasNext()) {
+			if (borrowedItems.next() instanceof ReservedBook) {
 				return true;
 			}
 		}
@@ -386,12 +398,11 @@ public class Member implements Serializable, Matchable<String> {
 
 	public boolean hasCamera() {
 		Iterator<LoanableItem> borrowedItems = itemsBorrowed.iterator();
-		while(borrowedItems.hasNext()){
-			if(borrowedItems.next() instanceof Camera){
+		while (borrowedItems.hasNext()) {
+			if (borrowedItems.next() instanceof DigitalCamera) {
 				return true;
 			}
 		}
 		return false;
-	}
 	}
 }

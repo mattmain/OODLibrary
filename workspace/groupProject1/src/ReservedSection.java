@@ -1,7 +1,8 @@
 public class ReservedSection extends Catalog {
 
 	private static ReservedSection reservedSection;
-	private MemberList memberList;
+
+	// private MemberList memberList;
 
 	/*
 	 * Private constructor for singleton pattern

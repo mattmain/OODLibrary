@@ -2,14 +2,15 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 public class DigitalCamera extends LoanableItem implements Serializable,
-Matchable<String>{
+		Matchable<String> {
 
 	private String brand;
-	
+
 	protected DigitalCamera(String id, String brand) {
 		super(id);
 		this.brand = brand;
 	}
+
 	/**
 	 * Marks the digital camera as issued to a member
 	 * 
@@ -63,8 +64,8 @@ Matchable<String>{
 	public void accept(LoanableItemVisitor visitor) {
 		visitor.visit(this);
 	}
+
+	public String getBrand() {
+		return this.brand;
+	}
 }
-
-
-
-

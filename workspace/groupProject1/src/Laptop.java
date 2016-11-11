@@ -2,14 +2,14 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 public class Laptop extends LoanableItem implements Serializable,
-Matchable<String> {
-private String brand;
-	
+		Matchable<String> {
+	private String brand;
 
 	protected Laptop(String id, String brand) {
 		super(id);
 		this.brand = brand;
 	}
+
 	/**
 	 * Marks the laptop as issued to a member
 	 * 
@@ -63,10 +63,8 @@ private String brand;
 	public void accept(LoanableItemVisitor visitor) {
 		visitor.visit(this);
 	}
+
+	public String getBrand() {
+		return brand;
+	}
 }
-
-
-
-
-
-

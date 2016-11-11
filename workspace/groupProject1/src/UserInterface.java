@@ -41,7 +41,7 @@ public class UserInterface {
 	private static Library library;
 	private static final int EXIT = 0;
 	private static final int ADD_MEMBER = 1;
-	private static final int ADD_BOOKS = 2;
+	private static final int ADD_ITEMS = 2;
 	private static final int ISSUE_ITEMS = 3;
 	private static final int RETURN_ITEMS = 4;
 	private static final int RENEW_ITEMS = 5;
@@ -200,10 +200,10 @@ public class UserInterface {
 				.println("Enter a number between 0 and 18 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
 		System.out.println(ADD_MEMBER + " to add a member");
-		System.out.println(ADD_BOOKS + " to  add books");
-		System.out.println(ISSUE_BOOKS + " to  issue books to a  member");
+		System.out.println(ADD_ITEMS + " to  add books");
+		System.out.println(ISSUE_ITEMS + " to  issue books to a  member");
 		System.out.println(RETURN_ITEMS + " to  return books ");
-		System.out.println(RENEW_BOOKS + " to  renew books ");
+		System.out.println(RENEW_ITEMS + " to  renew books ");
 		System.out.println(REMOVE_ITEMS + " to  remove items");
 		System.out.println(PLACE_HOLD + " to  place a hold on a book");
 		System.out.println(REMOVE_HOLD + " to  remove a hold on a book");
@@ -280,26 +280,58 @@ public class UserInterface {
 	 * 
 	 */
 	public void addLoanableItems() {
-		LoanableItem result;
+		LoanableItem result = null;
+		String brand = null;
+		String id = null;
+		String author = null;
+		String title = null;
 		do {
 			int type;
-			do {
-				type = getNumber("Enter " + Library.BOOK + " for book or "
-						+ Library.PERIODICAL + " for periodical");
-			} while (type != Library.BOOK && type != Library.PERIODICAL);
-			String title = getToken("Enter title");
-			String author = "";
+			// do {
+			type = getNumber("Enter:\n" + Library.BOOK + " for book \n"
+					+ Library.PERIODICAL + " for periodical \n" + Library.DVD
+					+ " for dvd \n" + Library.CAMERA + " for camera \n"
+					+ Library.LAPTOP + " for laptop");
+			// } //while (type != Library.BOOK && type != Library.PERIODICAL);
 			if (type == Library.BOOK) {
 				author = getToken("Enter author");
+				title = getToken("Enter title");
+				id = getToken("Enter id");
+				result = library
+						.addLoanableItem(type, title, author, id, brand);
 			}
-			String id = getToken("Enter id");
-			result = library.addLoanableItem(type, title, author, id);
+			if (type == Library.PERIODICAL) {
+				title = getToken("Enter title");
+				id = getToken("Enter id");
+				result = library
+						.addLoanableItem(type, title, author, id, brand);
+			}
+			if (type == Library.DVD) {
+				title = getToken("Enter title");
+				id = getToken("Enter id");
+				result = library
+						.addLoanableItem(type, title, author, id, brand);
+			}
+			if (type == Library.CAMERA) {
+				brand = getToken("Enter brand");
+				id = getToken("Enter id");
+				result = library
+						.addLoanableItem(type, title, author, id, brand);
+			}
+			if (type == Library.LAPTOP) {
+				title = getToken("Enter title");
+				id = getToken("Enter id");
+				result = library
+						.addLoanableItem(type, title, author, id, brand);
+
+			}
+
 			if (result != null) {
 				System.out.println(result);
 			} else {
-				System.out.println("Book could not be added");
+				System.out.println("Item could not be added");
 			}
-			if (!yesOrNo("Add more books?")) {
+			if (!yesOrNo("Add more items?")) {
 				break;
 			}
 		} while (true);
@@ -685,10 +717,10 @@ public class UserInterface {
 			case ADD_MEMBER:
 				addMember();
 				break;
-			case ADD_BOOKS:
+			case ADD_ITEMS:
 				addLoanableItems();
 				break;
-			case ISSUE_BOOKS:
+			case ISSUE_ITEMS:
 				issueLoanableItems();
 				break;
 			case RETURN_ITEMS:
@@ -697,7 +729,7 @@ public class UserInterface {
 			case REMOVE_ITEMS:
 				removeLoanableItems();
 				break;
-			case RENEW_BOOKS:
+			case RENEW_ITEMS:
 				renewLoanableItems();
 				break;
 			case PLACE_HOLD:

@@ -27,9 +27,11 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 		this.id = id;
 		holds = new LinkedList();
 	}
-	protected LoanableItem(String id){
+
+	protected LoanableItem(String id) {
 		this.id = id;
 	}
+
 	/**
 	 * Issue an item to a member
 	 * 
@@ -177,7 +179,6 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 
 	}
 
-
 	public double calculateFine() {
 		int dueDate = (int) (this.dueDate.getTimeInMillis() / 86400000);
 		int currentDay = (int) (System.currentTimeMillis() / 86400000);
@@ -188,5 +189,10 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 		}
 
 		return fine;
+	}
+
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
+
 	}
 }

@@ -64,7 +64,7 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		if (loanableItem == null) {
 			return false;
 		} else {
-			return super.remove((Book) loanableItem);
+			return super.remove(loanableItem);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class Catalog extends ItemList<LoanableItem, String> {
 	 * @return true iff the book could be inserted. Currently always true
 	 */
 	public boolean insertLoanableItem(LoanableItem loanableItem) {
-		return super.add((Book) loanableItem);
+		return super.add(loanableItem);
 	}
 
 	/*
@@ -110,23 +110,19 @@ public class Catalog extends ItemList<LoanableItem, String> {
 	 * 
 	 * @return books that are currently borrowed.
 	 */
-/*
-	public Iterator<LoanableItem> getBorrowedBookList() {
-		Iterator<LoanableItem> books = iterator();
-		List<LoanableItem> borrowedBooks = new LinkedList<LoanableItem>();
-
-		while (books.hasNext()) {
-
-			LoanableItem item = books.next();
-
-			if (item.isBorrowed()) {
-				borrowedBooks.add(item);
-			}
-		}
-
-		return borrowedBooks.iterator();
-	}
-*/
+	/*
+	 * public Iterator<LoanableItem> getBorrowedBookList() {
+	 * Iterator<LoanableItem> books = iterator(); List<LoanableItem>
+	 * borrowedBooks = new LinkedList<LoanableItem>();
+	 * 
+	 * while (books.hasNext()) {
+	 * 
+	 * LoanableItem item = books.next();
+	 * 
+	 * if (item.isBorrowed()) { borrowedBooks.add(item); } }
+	 * 
+	 * return borrowedBooks.iterator(); }
+	 */
 
 	/**
 	 * Gets books with holds
@@ -179,7 +175,7 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		}
 		return overDueItems.iterator();
 	}
-	
+
 	public Iterator<LoanableItem> getCheckedOutItem() {
 		Iterator<LoanableItem> items = iterator();
 		List<LoanableItem> borrowedItems = new LinkedList<LoanableItem>();
@@ -189,16 +185,15 @@ public class Catalog extends ItemList<LoanableItem, String> {
 			LoanableItem item = items.next();
 
 			if (item.isBorrowed()) {
-					borrowedItems.add(item);
+				borrowedItems.add(item);
 			}
 		}
 
 		return borrowedItems.iterator();
 	}
-	
+
 	public LoanableItem search(String itemId) {
 		return super.search(itemId);
 	}
-
 
 }

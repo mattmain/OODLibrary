@@ -99,9 +99,9 @@ public class Library implements Serializable {
 	 * @return the Book object created
 	 */
 	public LoanableItem addLoanableItem(int type, String title, String author,
-			String id) {
+			String id, String brand) {
 		LoanableItem item = LoanableItemFactory.instance().createLoanableItem(
-				type, title, author, id);
+				type, title, author, id, brand);
 		if (catalog.insertLoanableItem(item)) {
 			return (item);
 		}
@@ -165,7 +165,7 @@ public class Library implements Serializable {
 	 */
 	public int placeHold(int memSeqNum, int bookSeqNum, int duration) {
 		if (bookSeqNum == -1) {
-			return library.NO_BOOK_CHECKED_OUT;
+			return Library.NO_BOOK_CHECKED_OUT;
 		}
 
 		Iterator<LoanableItem> item2 = catalog.getCheckedOutItem();

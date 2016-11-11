@@ -81,15 +81,15 @@ public class MemberList extends ItemList<Member, String> {
 		return false;
 	}
 
-//	public boolean isRemovable(Member member) {
-//
-//		if (member.hasHolds() || member.hasFines()) {
-//			return false;
-//
-//		}
-//		return true;
-//
-//	}
+	// public boolean isRemovable(Member member) {
+	//
+	// if (member.hasHolds() || member.hasFines()) {
+	// return false;
+	//
+	// }
+	// return true;
+	//
+	// }
 	/*
 	 * Supports serialization
 	 * 
@@ -123,7 +123,7 @@ public class MemberList extends ItemList<Member, String> {
 	 */
 	public Iterator<Member> getMembersWithHolds() {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
-		Iterator memberIterator = iterator();
+		Iterator<Member> memberIterator = iterator();
 
 		while (memberIterator.hasNext()) {
 			Member member = (Member) memberIterator.next();
@@ -141,7 +141,7 @@ public class MemberList extends ItemList<Member, String> {
 	 */
 	public Iterator<Member> getMembersWithBooks() {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
-		Iterator memberIterator = iterator();
+		Iterator<Member> memberIterator = iterator();
 
 		while (memberIterator.hasNext()) {
 			Member member = (Member) memberIterator.next();

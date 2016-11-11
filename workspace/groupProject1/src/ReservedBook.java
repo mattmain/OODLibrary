@@ -28,7 +28,7 @@ public class ReservedBook extends Book {
 
 	@Override
 	public boolean issue(Member member) {
-		if (member.hasReservedBook()) {
+		if (member.hasReservedBook() || member.hasCamera()) {
 			return false;
 		}
 		if (super.issue(member)) {
