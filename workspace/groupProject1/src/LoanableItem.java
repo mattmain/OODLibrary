@@ -16,7 +16,7 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 	private List<Hold> holds;
 
 	public boolean matches(String other) {
-		return (this.id.equals(id));
+		return (id.equals(other));
 	}
 
 	// getters for all fields
@@ -125,7 +125,11 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 	 */
 	public Member returnItem() {
 		Member member = this.getBorrower();
-		member.returnBook((Book) this);
+		if (member == null) {
+			System.out.println("Item was not checked out");
+			return null;
+		}
+		member.returnItem(this);
 		borrowedBy = null;
 		return member;
 	}
@@ -172,10 +176,9 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 		return System.currentTimeMillis() > dueDate.getTimeInMillis();
 	}
 
-	public String setDueDate(Calendar dueDate2) {
+	public int setDueDate(Calendar dueDate2) {
 		dueDate = dueDate2;
-		return "The due date has been successfully updated to "
-				+ dueDate2.toString();
+		return Library.OPERATION_COMPLETED;
 
 	}
 

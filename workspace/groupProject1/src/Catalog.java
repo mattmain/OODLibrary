@@ -169,7 +169,6 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		while (checkedOutItems.hasNext()) {
 			LoanableItem item = checkedOutItems.next();
 			if (item.isOverdue()) {
-				System.out.println("Item is overdue!");
 				overDueItems.add(item);
 			}
 		}

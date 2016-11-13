@@ -262,14 +262,14 @@ public class UserInterface {
 			}
 			if (result == Library.OPERATION_COMPLETED) {
 				System.out.println("OPERATION_COMPLETED");
-				if (!yesOrNo("Remove another member?")) {
-					process();
-				} else {
-					System.out.println("OPERATION_FAILED");
-					removeMember();
-				}
+			} else {
+				System.out.println("OPERATION_FAILED");
+				removeMember();
 			}
+			if (!yesOrNo("Remove another member?")) {
+				break;
 
+			}
 		} while (true);
 	}
 
@@ -362,7 +362,7 @@ public class UserInterface {
 			}
 			if (memSeqNum != -1) {
 
-				Iterator<LoanableItem> books = library.getBooksNotBorrowed();
+				Iterator<LoanableItem> books = library.getItemsNotBorrowed();
 
 				if (!books.hasNext()) {
 					System.out
@@ -471,7 +471,7 @@ public class UserInterface {
 				System.out.println("No such Book in Library");
 				break;
 			case Library.ITEM_NOT_ISSUED:
-				System.out.println(" Book  was not checked out");
+				System.out.println(" Item was not checked out");
 				break;
 			case Library.ITEM_HAS_HOLD:
 				System.out.println("Book has a hold");
@@ -501,34 +501,42 @@ public class UserInterface {
 	public void removeLoanableItems() {
 		int bookSeqNum = 0;
 		do {
-			Iterator books = library.getBooksNotBorrowed();
-			bookSeqNum = getSeqNum(books);
-			if (bookSeqNum != -1) {
-				break;
+			Iterator<LoanableItem> items = library.getItemsNotBorrowed();
+
+			if (items == null) {
+				System.out
+						.println("There are not items that are able to be removed");
+				return;
+			}
+
+			bookSeqNum = getSeqNum(items);
+			if (bookSeqNum == -1) {
+				return;
 			} else {
 				int result = library.removeLoanableItems(bookSeqNum);
 
-				if (result == library.ITEM_NOT_FOUND) {
+				if (result == Library.ITEM_NOT_FOUND) {
 					System.out.println("ITEM_NOT_FOUND");
 					removeLoanableItems();
 				}
-				if (result == library.ITEM_HAS_HOLD) {
+				if (result == Library.ITEM_HAS_HOLD) {
 					System.out.println("ITEM_HAS_HOLD");
 					removeLoanableItems();
 				}
-				if (result == library.ITEM_ISSUED) {
+				if (result == Library.ITEM_ISSUED) {
 					System.out.println("ITEM_ISSUED");
 					removeLoanableItems();
 				}
-				if (result == library.OPERATION_COMPLETED) {
+				if (result == Library.OPERATION_COMPLETED) {
 					System.out.println("OPERATION_COMPLETED");
-					if (!yesOrNo("Remove more books?")) {
-						process();
-					} else {
-						System.out.println("OPERATION_FAILED");
-						removeLoanableItems();
-					}
+				} else {
+					System.out.println("OPERATION_FAILED");
+					removeLoanableItems();
 				}
+				if (!yesOrNo("Remove more books?")) {
+					break;
+				}
+
 			}
 		} while (true);
 	}
@@ -830,9 +838,18 @@ public class UserInterface {
 	private void setDueDate() {
 		Iterator<LoanableItem> items = library.getBorrowedBooks();
 		int itemSeqNum = getSeqNum(items);
+		if (itemSeqNum == -1) {
+			return;
+		}
+
 		Calendar dueDate = getDate("Please enter the new due date as mm/dd/yy");
-		String result = library.setDueDate(itemSeqNum, dueDate);
-		System.out.println(result);
+		int result = library.setDueDate(itemSeqNum, dueDate);
+		if (result == Library.ITEM_NOT_FOUND) {
+			System.out.println("Invalid Item Sequence Number Entered");
+		}
+		if (result == Library.OPERATION_COMPLETED) {
+			System.out.println("The due date has been changed");
+		}
 	}
 
 	/**

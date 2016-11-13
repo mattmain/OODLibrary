@@ -82,15 +82,12 @@ public class Member implements Serializable, Matchable<String> {
 	 * @param book
 	 *            the book to be returned
 	 * @return true iff the book could be marked as marked as returned
+	 * 
+	 *         public boolean returnBook(Book book) { if
+	 *         (itemsBorrowed.remove(book)) { transactions .add(new
+	 *         Transaction("Book returned ", book.getTitle())); return true; }
+	 *         return false; }
 	 */
-	public boolean returnBook(Book book) {
-		if (itemsBorrowed.remove(book)) {
-			transactions
-					.add(new Transaction("Book returned ", book.getTitle()));
-			return true;
-		}
-		return false;
-	}
 
 	/**
 	 * Marks the book as renewe
@@ -347,7 +344,7 @@ public class Member implements Serializable, Matchable<String> {
 	 */
 	public boolean returnItem(LoanableItem loanableItem) {
 		fine += loanableItem.calculateFine();
-		loanableItem.returnItem();
+		// loanableItem.returnItem();
 		itemsBorrowed.remove(loanableItem);
 		return true;
 	}

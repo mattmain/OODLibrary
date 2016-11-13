@@ -467,14 +467,16 @@ public class Library implements Serializable {
 	}
 
 	public int removeLoanableItems(int bookSeqNum) {
-		Iterator<LoanableItem> bookIterator = catalog.getItemsNotBorrowed();
+		Iterator<LoanableItem> itemIterator = getItemsNotBorrowed();
 
 		LoanableItem item = null;
 
 		for (int i = 0; i <= bookSeqNum; i++) {
-			item = bookIterator.next();
+			if (!itemIterator.hasNext()) {
+				return Library.ITEM_NOT_FOUND;
+			}
+			item = itemIterator.next();
 		}
-
 		return removeLoanableItem(item.getId());
 
 	}
@@ -758,7 +760,7 @@ public class Library implements Serializable {
 		return catalog.getBooksWithHolds();
 	}
 
-	public Iterator<LoanableItem> getBooksNotBorrowed() {
+	public Iterator<LoanableItem> getItemsNotBorrowed() {
 		return catalog.getItemsNotBorrowed();
 	}
 
@@ -767,11 +769,14 @@ public class Library implements Serializable {
 
 	}
 
-	public String setDueDate(int itemSeqNum, Calendar dueDate) {
+	public int setDueDate(int itemSeqNum, Calendar dueDate) {
 		Iterator<LoanableItem> borrowedItems = catalog.getCheckedOutItem();
 		LoanableItem item = null;
 
 		for (int i = 0; i <= itemSeqNum; i++) {
+			if (!borrowedItems.hasNext()) {
+				return Library.ITEM_NOT_FOUND;
+			}
 			item = borrowedItems.next();
 		}
 

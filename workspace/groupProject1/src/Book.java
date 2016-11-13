@@ -105,11 +105,7 @@ public class Book extends LoanableItem implements Serializable,
 
 	@Override
 	public boolean matches(String key) {
-		String id = super.getId();
-		if (id == key) {
-			return true;
-		}
-		return false;
+		return super.matches(key);
 	}
 
 	/**
