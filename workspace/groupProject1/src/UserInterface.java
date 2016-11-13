@@ -346,21 +346,51 @@ public class UserInterface {
 	public void issueLoanableItems() {
 		int memSeqNum = 0;
 		int bookSeqNum = 0;
+		int result = 0;
 
-		Iterator<Member> members = library.getMembers();
-		memSeqNum = getSeqNum(members);
+		do {
+			Iterator<Member> members = library.getMembers();
 
-		if (memSeqNum != -1) {
-
-			Iterator<LoanableItem> books = library.getBooksNotBorrowed();
-			bookSeqNum = getSeqNum(books);
-
-			if (bookSeqNum != -1) {
-
-				library.issueLoanableItem(memSeqNum, bookSeqNum);
-
+			if (!members.hasNext()) {
+				System.out.println("There are no members to issue books to");
+				return;
 			}
-		}
+			memSeqNum = getSeqNum(members);
+
+			if (memSeqNum == -1) {
+				return;
+			}
+			if (memSeqNum != -1) {
+
+				Iterator<LoanableItem> books = library.getBooksNotBorrowed();
+
+				if (!books.hasNext()) {
+					System.out
+							.println("There are no books that can be checked out");
+					return;
+				}
+
+				bookSeqNum = getSeqNum(books);
+
+				if (bookSeqNum != -1) {
+
+					result = library.issueLoanableItem(memSeqNum, bookSeqNum);
+
+				}
+
+				if (result == Library.MEMBER_NOT_FOUND) {
+					System.out
+							.println("Invalid Member Sequence number entered");
+				}
+				if (result == Library.BOOK_NOT_FOUND) {
+					System.out.println("Invalid Item Sequence number entered");
+				}
+
+				if (!yesOrNo("issue more books?")) {
+					break;
+				}
+			}
+		} while (true);
 	}
 
 	public int getSeqNum(Iterator iterator) {
@@ -534,9 +564,11 @@ public class UserInterface {
 				case Library.ITEM_NOT_ISSUED:
 					System.out.println(" Book is not checked out");
 					break;
-				case Library.NO_SUCH_MEMBER:
+				case Library.MEMBER_NOT_FOUND:
 					System.out.println("Not a valid member ID");
 					break;
+				case Library.BOOK_NOT_FOUND:
+					System.out.println("Not a valid item ID");
 				case Library.HOLD_PLACED:
 					System.out.println("A hold has been placed");
 					break;

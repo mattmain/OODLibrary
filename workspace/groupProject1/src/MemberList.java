@@ -81,15 +81,6 @@ public class MemberList extends ItemList<Member, String> {
 		return false;
 	}
 
-	// public boolean isRemovable(Member member) {
-	//
-	// if (member.hasHolds() || member.hasFines()) {
-	// return false;
-	//
-	// }
-	// return true;
-	//
-	// }
 	/*
 	 * Supports serialization
 	 * 
@@ -150,6 +141,10 @@ public class MemberList extends ItemList<Member, String> {
 		}
 
 		return listOfMembers.iterator();
+	}
+
+	public Iterator<Member> getMembers() {
+		return iterator();
 	}
 
 }

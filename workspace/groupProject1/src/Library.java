@@ -52,10 +52,12 @@ public class Library implements Serializable {
 	public static final int LAPTOP = 5;
 
 	public static final int MEMBER_NOT_FOUND = 11;
+	public static final int BOOK_NOT_FOUND = 15;
 	public static final int MEMBER_HAS_HOLD = 12;
 	public static final int MEMBER_REMOVED = 13;
 	public static final int MEMBER_HAS_FINES = 14;
 	public static final int EXIT = 15;
+	private static final int NO_SUCH_BOOK = 0;
 	private Catalog catalog;
 	private ReservedSection reservedSection;
 	private MemberList memberList;
@@ -176,8 +178,15 @@ public class Library implements Serializable {
 		for (int i = 0; i <= memSeqNum; i++) {
 			member = (Member) memIterator.next();
 		}
+		if (member == null) {
+			return Library.NO_SUCH_MEMBER;
+		}
+
 		for (int j = 0; j <= bookSeqNum; j++) {
 			book = (LoanableItem) item2.next();
+		}
+		if (book == null) {
+			return Library.NO_SUCH_BOOK;
 		}
 		return placeHold(member.getId(), book.getId(), duration);
 
@@ -328,22 +337,31 @@ public class Library implements Serializable {
 	 * @return the item issued
 	 */
 
-	public void issueLoanableItem(int memSeqNum, int bookSeqNum) {
+	public int issueLoanableItem(int memSeqNum, int bookSeqNum) {
 		Iterator<Member> memIterator = memberList.iterator();
-		Iterator<LoanableItem> bookIterator = catalog.getBooksNotBorrowed();
+		Iterator<LoanableItem> itemIterator = catalog.getItemsNotBorrowed();
 
 		Member member = null;
 		LoanableItem item = null;
 
 		for (int i = 0; i <= memSeqNum; i++) {
-			member = (Member) memIterator.next();
+			if (memIterator.hasNext()) {
+				member = (Member) memIterator.next();
+			} else {
+				return Library.MEMBER_NOT_FOUND;
+			}
 		}
 		for (int i = 0; i <= bookSeqNum; i++) {
-			item = (LoanableItem) bookIterator.next();
+			if (itemIterator.hasNext()) {
+				item = (LoanableItem) itemIterator.next();
+			} else {
+				return Library.BOOK_NOT_FOUND;
+			}
 		}
 
 		System.out.println(member.getId() + ":" + item.getId());
 		issueLoanableItem(member.getId(), item.getId());
+		return Library.OPERATION_COMPLETED;
 
 	}
 
@@ -449,7 +467,7 @@ public class Library implements Serializable {
 	}
 
 	public int removeLoanableItems(int bookSeqNum) {
-		Iterator<LoanableItem> bookIterator = catalog.getBooksNotBorrowed();
+		Iterator<LoanableItem> bookIterator = catalog.getItemsNotBorrowed();
 
 		LoanableItem item = null;
 
@@ -638,7 +656,7 @@ public class Library implements Serializable {
 	 * @return all members in the memberList as an iterator object
 	 */
 	public Iterator<Member> getMembers() {
-		return memberList.iterator();
+		return memberList.getMembers();
 	}
 
 	/**
@@ -741,7 +759,7 @@ public class Library implements Serializable {
 	}
 
 	public Iterator<LoanableItem> getBooksNotBorrowed() {
-		return catalog.getBooksNotBorrowed();
+		return catalog.getItemsNotBorrowed();
 	}
 
 	public Iterator<LoanableItem> getOverDueItems() {

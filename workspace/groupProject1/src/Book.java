@@ -49,7 +49,6 @@ public class Book extends LoanableItem implements Serializable,
 	public Book(String title, String author, String id) {
 		super(title, id);
 		this.author = author;
-
 	}
 
 	/**
@@ -130,5 +129,17 @@ public class Book extends LoanableItem implements Serializable,
 
 	public String getTitle() {
 		return super.getTitle();
+	}
+
+	public void setBorrowed(boolean borrowed) {
+		this.borrowed = borrowed;
+	}
+
+	public boolean getHasHold() {
+		return hasHold;
+	}
+
+	public void setHasHold(boolean hasHold) {
+		this.hasHold = hasHold;
 	}
 }

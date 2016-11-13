@@ -146,20 +146,20 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		return booksWithHolds.iterator();
 	}
 
-	public Iterator<LoanableItem> getBooksNotBorrowed() {
-		Iterator<LoanableItem> books = iterator();
-		List<LoanableItem> booksNotBorrowed = new LinkedList<LoanableItem>();
+	public Iterator<LoanableItem> getItemsNotBorrowed() {
+		Iterator<LoanableItem> items = iterator();
+		List<LoanableItem> itemsNotBorrowed = new LinkedList<LoanableItem>();
 
-		while (books.hasNext()) {
+		while (items.hasNext()) {
 
-			Book book = (Book) books.next();
+			LoanableItem item = items.next();
 
-			if (!book.isBorrowed() && !book.hasHold()) {
-				booksNotBorrowed.add(book);
+			if (!item.isBorrowed() && !item.hasHold()) {
+				itemsNotBorrowed.add(item);
 			}
 		}
 
-		return booksNotBorrowed.iterator();
+		return itemsNotBorrowed.iterator();
 
 	}
 
