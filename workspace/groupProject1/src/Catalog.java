@@ -145,6 +145,7 @@ public class Catalog extends ItemList<LoanableItem, String> {
 
 		return booksWithHolds.iterator();
 	}
+<<<<<<< HEAD
 /**
  * Gets books that are not borrowed
  * 
@@ -153,17 +154,23 @@ public class Catalog extends ItemList<LoanableItem, String> {
 	public Iterator<LoanableItem> getBooksNotBorrowed() {
 		Iterator<LoanableItem> books = iterator();
 		List<LoanableItem> booksNotBorrowed = new LinkedList<LoanableItem>();
+=======
 
-		while (books.hasNext()) {
+	public Iterator<LoanableItem> getItemsNotBorrowed() {
+		Iterator<LoanableItem> items = iterator();
+		List<LoanableItem> itemsNotBorrowed = new LinkedList<LoanableItem>();
+>>>>>>> 51f394e4184b9afa41548735cc7c093c619dec92
 
-			Book book = (Book) books.next();
+		while (items.hasNext()) {
 
-			if (!book.isBorrowed() && !book.hasHold()) {
-				booksNotBorrowed.add(book);
+			LoanableItem item = items.next();
+
+			if (!item.isBorrowed() && !item.hasHold()) {
+				itemsNotBorrowed.add(item);
 			}
 		}
 
-		return booksNotBorrowed.iterator();
+		return itemsNotBorrowed.iterator();
 
 	}
 /**
@@ -177,7 +184,6 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		while (checkedOutItems.hasNext()) {
 			LoanableItem item = checkedOutItems.next();
 			if (item.isOverdue()) {
-				System.out.println("Item is overdue!");
 				overDueItems.add(item);
 			}
 		}
@@ -206,6 +212,10 @@ public class Catalog extends ItemList<LoanableItem, String> {
 
 	public LoanableItem search(String itemId) {
 		return super.search(itemId);
+	}
+
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
 	}
 
 }

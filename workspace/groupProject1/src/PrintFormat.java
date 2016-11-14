@@ -21,7 +21,7 @@
  * Prints all LoanableItem objects formatted.
  * 
  * @author Brahma Dathan
- *
+ * 
  */
 public class PrintFormat implements LoanableItemVisitor {
 	private static PrintFormat visitor;
@@ -48,7 +48,6 @@ public class PrintFormat implements LoanableItemVisitor {
 	 * This is not a fully implemented method. It essentially prints the
 	 * object's string representation.
 	 */
-	@Override
 	public void visit(LoanableItem item) {
 		System.out.println("Print " + item + " formatted");
 	}
@@ -57,7 +56,6 @@ public class PrintFormat implements LoanableItemVisitor {
 	 * This is not a fully implemented method. It essentially prints the
 	 * object's string representation.
 	 */
-	@Override
 	public void visit(Book book) {
 		System.out.println("Print " + book + " formatted");
 	}
@@ -66,9 +64,16 @@ public class PrintFormat implements LoanableItemVisitor {
 	 * This is not a fully implemented method. It essentially prints the
 	 * object's string representation.
 	 */
-	@Override
 	public void visit(Periodical periodical) {
 		System.out.println("Print " + periodical + " formatted");
+	}
+
+	public void visit(DVD dvd) {
+		System.out.println("Print " + dvd + " formatted");
+	}
+
+	public void visit(Laptop laptop) {
+		System.out.println("Print " + laptop + " formatted");
 	}
 
 }

@@ -83,6 +83,11 @@ public class Member implements Serializable, Matchable<String> {
 	 * @param book
 	 *            the book to be returned
 	 * @return true iff the book could be marked as marked as returned
+	 * 
+	 *         public boolean returnBook(Book book) { if
+	 *         (itemsBorrowed.remove(book)) { transactions .add(new
+	 *         Transaction("Book returned ", book.getTitle())); return true; }
+	 *         return false; }
 	 */
 	public boolean returnBook(Book book) {
 		if (itemsBorrowed.remove(book)) {
@@ -91,6 +96,7 @@ public class Member implements Serializable, Matchable<String> {
 		}
 		return false;
 	}
+
 
 	/**
 	 * Marks the book as renewed
@@ -351,7 +357,7 @@ public class Member implements Serializable, Matchable<String> {
 	 */
 	public boolean returnItem(LoanableItem loanableItem) {
 		fine += loanableItem.calculateFine();
-		loanableItem.returnItem();
+		// loanableItem.returnItem();
 		itemsBorrowed.remove(loanableItem);
 		return true;
 	}
@@ -396,6 +402,10 @@ public class Member implements Serializable, Matchable<String> {
 	 * @param member
 	 * @return true iff the member has no fines and/or no holds placed
 	 */
+	public double getFines() {
+		return fine;
+	}
+
 	public boolean isRemovable(Member member) {
 
 		if (member.hasHolds() || member.hasFines()) {
@@ -434,5 +444,22 @@ public class Member implements Serializable, Matchable<String> {
 			}
 		}
 		return false;
+	}
+
+	public double payFines(double amount) {
+		this.fine = fine - amount;
+		return fine;
+
+	}
+
+	public boolean hasItem() {
+		if (this.itemsBorrowed.size() > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
 	}
 }

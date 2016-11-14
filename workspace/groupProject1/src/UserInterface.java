@@ -35,7 +35,7 @@ import java.util.StringTokenizer;
  * number of utility methods exist to make it easier to parse the input.
  * 
  */
-public class UserInterface {
+public class UserInterface implements LoanableItemVisitor {
 	private static UserInterface userInterface;
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static Library library;
@@ -211,6 +211,8 @@ public class UserInterface {
 		System.out.println(REMOVE_MEMBER + " to remove a member");
 		System.out.println(GET_OVERDUE_ITEMS + "  to print list of overdue items");
 		System.out.println(SET_DUE_DATE + "  to chage the due date of an item");
+		System.out.println(MOVE_TO_RESERVED
+				+ "  to move item to the reserved section");
 		System.out.println(HELP + " for help");
 	}
 
@@ -249,27 +251,28 @@ public class UserInterface {
 				process();
 			}
 			if (result == Library.MEMBER_NOT_FOUND) {
-				System.out.println("MEMBER_NOT_FOUND");
+				System.out.println("Unable to remove member: MEMBER_NOT_FOUND");
 				removeMember();
 			}
 			if (result == Library.MEMBER_HAS_HOLD) {
-				System.out.println("MEMBER_HAS_HOLD");
+				System.out
+						.println("Unable to remove member: MEMBER_HAS_HOLD or MEMBER_HAS_ITEM");
 				removeMember();
 			}
 			if (result == Library.MEMBER_HAS_FINES) {
-				System.out.println("MEMBER_HAS_FINES");
+				System.out.println("Unable to remove member: MEMBER_HAS_FINES");
 				removeMember();
 			}
 			if (result == Library.OPERATION_COMPLETED) {
 				System.out.println("OPERATION_COMPLETED");
-				if (!yesOrNo("Remove another member?")) {
-					process();
-				} else {
-					System.out.println("OPERATION_FAILED");
-					removeMember();
-				}
+			} else {
+				System.out.println("OPERATION_FAILED");
+				removeMember();
 			}
+			if (!yesOrNo("Remove another member?")) {
+				break;
 
+			}
 		} while (true);
 	}
 
@@ -313,21 +316,63 @@ public class UserInterface {
 	public void issueLoanableItems() {
 		int memSeqNum = 0;
 		int bookSeqNum = 0;
+		int result = 0;
 
-		Iterator<Member> members = library.getMembers();
-		memSeqNum = getSeqNum(members);
+		do {
+			Iterator<Member> members = library.getMembers();
 
-		if (memSeqNum != -1) {
-
-			Iterator<LoanableItem> books = library.getBooksNotBorrowed();
-			bookSeqNum = getSeqNum(books);
-
-			if (bookSeqNum != -1) {
-
-				library.issueLoanableItem(memSeqNum, bookSeqNum);
-
+			if (!members.hasNext()) {
+				System.out.println("There are no members to issue books to");
+				return;
 			}
-		}
+			memSeqNum = getSeqNum(members);
+
+			if (memSeqNum == -1) {
+				return;
+			}
+			if (memSeqNum != -1) {
+
+				Iterator<LoanableItem> books = library.getItemsNotBorrowed();
+
+				if (!books.hasNext()) {
+					System.out
+							.println("There are no books that can be checked out");
+					return;
+				}
+
+				bookSeqNum = getSeqNum(books);
+
+				if (bookSeqNum != -1) {
+
+					result = library.issueLoanableItem(memSeqNum, bookSeqNum);
+
+				}
+
+				if (result == Library.MEMBER_NOT_FOUND) {
+					System.out
+							.println("Invalid Member Sequence number entered");
+				}
+				if (result == Library.BOOK_NOT_FOUND) {
+					System.out.println("Invalid Item Sequence number entered");
+				}
+				if (result == Library.MEMBER_HAS_FINES) {
+					if (yesOrNo("Would member like to pay fines?")) {
+						payFines(memSeqNum);
+					}
+				}
+
+				if (!yesOrNo("issue more books?")) {
+					break;
+				}
+			}
+		} while (true);
+	}
+
+	private void payFines(int memSeqNum) {
+
+		double amount = getNumber("Please enter the amount paid");
+		double result = library.payFines(memSeqNum, amount);
+		System.out.println("The member has " + result + " in fines remaining");
 	}
 
 	/**
@@ -412,16 +457,16 @@ public class UserInterface {
 				System.out.println("No such Book in Library");
 				break;
 			case Library.ITEM_NOT_ISSUED:
-				System.out.println(" Book  was not checked out");
+				System.out.println("Item was not checked out");
 				break;
 			case Library.ITEM_HAS_HOLD:
-				System.out.println("Book has a hold");
+				System.out.println("Item has a hold");
 				break;
 			case Library.OPERATION_FAILED:
-				System.out.println("Book could not be returned");
+				System.out.println("Item could not be returned");
 				break;
 			case Library.OPERATION_COMPLETED:
-				System.out.println(" Book has been returned");
+				System.out.println("Item has been returned");
 				break;
 			default:
 				System.out.println("An error has occurred");
@@ -442,34 +487,42 @@ public class UserInterface {
 	public void removeLoanableItems() {
 		int bookSeqNum = 0;
 		do {
-			Iterator books = library.getBooksNotBorrowed();
-			bookSeqNum = getSeqNum(books);
-			if (bookSeqNum != -1) {
-				break;
+			Iterator<LoanableItem> items = library.getItemsNotBorrowed();
+
+			if (items == null) {
+				System.out
+						.println("There are not items that are able to be removed");
+				return;
+			}
+
+			bookSeqNum = getSeqNum(items);
+			if (bookSeqNum == -1) {
+				return;
 			} else {
 				int result = library.removeLoanableItems(bookSeqNum);
 
-				if (result == library.ITEM_NOT_FOUND) {
+				if (result == Library.ITEM_NOT_FOUND) {
 					System.out.println("ITEM_NOT_FOUND");
 					removeLoanableItems();
 				}
-				if (result == library.ITEM_HAS_HOLD) {
+				if (result == Library.ITEM_HAS_HOLD) {
 					System.out.println("ITEM_HAS_HOLD");
 					removeLoanableItems();
 				}
-				if (result == library.ITEM_ISSUED) {
+				if (result == Library.ITEM_ISSUED) {
 					System.out.println("ITEM_ISSUED");
 					removeLoanableItems();
 				}
-				if (result == library.OPERATION_COMPLETED) {
+				if (result == Library.OPERATION_COMPLETED) {
 					System.out.println("OPERATION_COMPLETED");
-					if (!yesOrNo("Remove more books?")) {
-						process();
-					} else {
-						System.out.println("OPERATION_FAILED");
-						removeLoanableItems();
-					}
+				} else {
+					System.out.println("OPERATION_FAILED");
+					removeLoanableItems();
 				}
+				if (!yesOrNo("Remove more books?")) {
+					break;
+				}
+
 			}
 		} while (true);
 	}
@@ -490,7 +543,7 @@ public class UserInterface {
 
 		if (memSeqNum != -1) {
 
-			Iterator<LoanableItem> books = library.getBorrowedBooks();
+			Iterator<LoanableItem> books = library.getBorrowedItems();
 			bookSeqNum = getSeqNum(books);
 
 			if (bookSeqNum != -1) {
@@ -505,9 +558,11 @@ public class UserInterface {
 				case Library.ITEM_NOT_ISSUED:
 					System.out.println(" Book is not checked out");
 					break;
-				case Library.NO_SUCH_MEMBER:
+				case Library.MEMBER_NOT_FOUND:
 					System.out.println("Not a valid member ID");
 					break;
+				case Library.BOOK_NOT_FOUND:
+					System.out.println("Not a valid item ID");
 				case Library.HOLD_PLACED:
 					System.out.println("A hold has been placed");
 					break;
@@ -725,10 +780,10 @@ public class UserInterface {
 			case SET_DUE_DATE:
 				setDueDate();
 				break;
-			case MOVE_TO_RESERVED:
-				moveToReserved();
 			case REMOVE_MEMBER:
 				removeMember();
+			case MOVE_TO_RESERVED:
+				moveToReserved();
 			case HELP:
 				help();
 				break;
@@ -744,9 +799,10 @@ public class UserInterface {
 		Iterator<LoanableItem> books = library.getBooks();
 		int bookID = -1;
 		while (books.hasNext()) {
-			System.out.println(books.toString());
+			System.out.println(books.next().toString());
 		}
 
+<<<<<<< HEAD
 		try {
 			bookID = Integer.parseInt(getToken("Enter an ID of a book to move or -1 to cancel."));
 		} catch (Exception e) {
@@ -756,6 +812,18 @@ public class UserInterface {
 		String result = library.moveToReserved(bookID);
 
 		System.out.println(result);
+=======
+		bookID = getToken("Enter an ID of a book to move or -1 to cancel.");
+
+		int result = library.moveToReserved(bookID);
+		if (result == Library.BOOK_NOT_FOUND) {
+			System.out.println("Unable to find book");
+		}
+		if (result == Library.OPERATION_COMPLETED) {
+			System.out.println("Book has been moved to the reserved section");
+
+		}
+>>>>>>> 51f394e4184b9afa41548735cc7c093c619dec92
 
 	}
 
@@ -764,11 +832,7 @@ public class UserInterface {
 	 * list.
 	 */
 	private void getOverDueItems() {
-		Iterator<LoanableItem> overDueItems = library.getOverDueItems();
-		while (overDueItems.hasNext()) {
-			System.out.println(overDueItems.next());
-		}
-
+		visit(library);
 	}
 
 	/**
@@ -776,11 +840,20 @@ public class UserInterface {
 	 * date.
 	 */
 	private void setDueDate() {
-		Iterator<LoanableItem> items = library.getBorrowedBooks();
+		Iterator<LoanableItem> items = library.getBorrowedItems();
 		int itemSeqNum = getSeqNum(items);
+		if (itemSeqNum == -1) {
+			return;
+		}
+
 		Calendar dueDate = getDate("Please enter the new due date as mm/dd/yy");
-		String result = library.setDueDate(itemSeqNum, dueDate);
-		System.out.println(result);
+		int result = library.setDueDate(itemSeqNum, dueDate);
+		if (result == Library.ITEM_NOT_FOUND) {
+			System.out.println("Invalid Item Sequence Number Entered");
+		}
+		if (result == Library.OPERATION_COMPLETED) {
+			System.out.println("The due date has been changed");
+		}
 	}
 
 	/**
@@ -791,5 +864,61 @@ public class UserInterface {
 	 */
 	public static void main(String[] args) {
 		UserInterface.instance().process();
+	}
+
+	public void visit(ItemList itemList) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Book book) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(DVD dvd) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Periodical periodical) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Laptop laptop) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(DigitalCamera digitalCamera) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Catalog catalog) {
+		// TODO Auto-generated method stub
+	}
+
+	public void visit(MemberList memberlist) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Member member) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Library library) {
+		Iterator<LoanableItem> borrowedItems = library.getBorrowedItems();
+		System.out.println("The following items are overdue");
+		while (borrowedItems.hasNext()) {
+			LoanableItem item = borrowedItems.next();
+			if (item.isOverdue()) {
+				System.out.println(item);
+			}
+		}
+
 	}
 }
