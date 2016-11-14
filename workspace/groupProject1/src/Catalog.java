@@ -145,7 +145,11 @@ public class Catalog extends ItemList<LoanableItem, String> {
 
 		return booksWithHolds.iterator();
 	}
-
+/**
+ * Gets books that are not borrowed
+ * 
+ * @return books that are not borrowed
+ */
 	public Iterator<LoanableItem> getBooksNotBorrowed() {
 		Iterator<LoanableItem> books = iterator();
 		List<LoanableItem> booksNotBorrowed = new LinkedList<LoanableItem>();
@@ -162,7 +166,11 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		return booksNotBorrowed.iterator();
 
 	}
-
+/**
+ *  Gets the overdue items
+ *
+ * @return the overdue items
+ */
 	public Iterator<LoanableItem> getOverDueItems() {
 		Iterator<LoanableItem> checkedOutItems = getCheckedOutItem();
 		List<LoanableItem> overDueItems = new LinkedList<LoanableItem>();
@@ -175,7 +183,11 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		}
 		return overDueItems.iterator();
 	}
-
+/**
+ * Gets the checked out items
+ * 
+ * @return the checked out items
+ */
 	public Iterator<LoanableItem> getCheckedOutItem() {
 		Iterator<LoanableItem> items = iterator();
 		List<LoanableItem> borrowedItems = new LinkedList<LoanableItem>();

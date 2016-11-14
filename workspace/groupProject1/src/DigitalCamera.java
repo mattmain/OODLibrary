@@ -1,6 +1,11 @@
 import java.io.Serializable;
 import java.util.Calendar;
-
+/**
+ * Represents a single digital camera
+ * 
+ * @author Group
+ *
+ */
 public class DigitalCamera extends LoanableItem implements Serializable,
 		Matchable<String> {
 
@@ -16,7 +21,7 @@ public class DigitalCamera extends LoanableItem implements Serializable,
 	 * 
 	 * @param member
 	 *            the borrower
-	 * @return true iff the digital camera could be issued. True currently
+	 * @return true if the digital camera could be issued. True currently
 	 */
 	@Override
 	public boolean issue(Member member) {

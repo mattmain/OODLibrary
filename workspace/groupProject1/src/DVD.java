@@ -1,6 +1,11 @@
 import java.io.Serializable;
 import java.util.Calendar;
-
+/**
+ * represents a single DVD
+ * 
+ * @author Group
+ *
+ */
 public class DVD extends LoanableItem implements Serializable,
 Matchable<String> {
 /**
@@ -29,7 +34,7 @@ Matchable<String> {
 	}
 
 	/**
-	 * Marks the book as returned
+	 * Marks the DVD as returned
 	 * 
 	 * @return The member who had borrowed the DVD
 	 */
@@ -48,7 +53,7 @@ Matchable<String> {
 	 * Implements the Matchable interface
 	 * 
 	 * @param key
-	 *            the id of the book
+	 *            the id of the DVD
 	 */
 	@Override
 	public boolean matches(String key) {

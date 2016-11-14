@@ -1,3 +1,4 @@
+
 /** 
  * @author Brahma Dathan and Sarnath Ramnath
  * @Copyright (c) 2014
@@ -34,14 +35,31 @@ public class ItemList<T extends Matchable<K>, K> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<T> list = new LinkedList<T>();
 
+	/**
+	 * Constructor for the ItemList
+	 * 
+	 * @param title
+	 * @param id
+	 */
+
 	public ItemList(String title, String id) {
-		// TODO Auto-generated constructor stub
+
 	}
 
+	/**
+	 * Constructor
+	 */
 	public ItemList() {
 
 	}
 
+	/**
+	 * Marks the item as issued to a member
+	 * 
+	 * @param member
+	 *            the borrower
+	 * @return true iff the item could be issued. True currently
+	 */
 	public boolean issue(Member member) {
 		return false;
 	}

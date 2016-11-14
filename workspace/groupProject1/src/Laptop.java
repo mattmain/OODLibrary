@@ -1,8 +1,13 @@
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class Laptop extends LoanableItem implements Serializable,
-		Matchable<String> {
+/**
+ * Represents a single Laptop
+ * 
+ * @author Group
+ *
+ */
+public class Laptop extends LoanableItem implements Serializable, Matchable<String> {
 	private String brand;
 
 	protected Laptop(String id, String brand) {

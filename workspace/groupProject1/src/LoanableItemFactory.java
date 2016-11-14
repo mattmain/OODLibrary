@@ -1,3 +1,9 @@
+/**
+ * Uses the factory pattern to create a number of items offered by the library
+ * 
+ * @author Group
+ *
+ */
 public class LoanableItemFactory {
 	private static final int BOOK = 1;
 	private static final int PERIODICAL = 2;
@@ -8,7 +14,11 @@ public class LoanableItemFactory {
 
 	private LoanableItemFactory() {
 	}
-
+	/**
+	 * Supports the singleton pattern
+	 * 
+	 * @return the singleton object
+	 */
 	public static LoanableItemFactory instance() {
 		if (singleton == null) {
 			singleton = new LoanableItemFactory();
@@ -16,7 +26,16 @@ public class LoanableItemFactory {
 		return singleton;
 	}
 
-	// code for Singleton
+/**
+ * method using switch statement to create various items offered by the library
+ * 
+ * @param type
+ * @param title
+ * @param author
+ * @param id
+ * @param brand
+ * @return the loanable item chosen by the user
+ */
 	public LoanableItem createLoanableItem(int type, String title,
 			String author, String id, String brand) {
 		switch (type) {

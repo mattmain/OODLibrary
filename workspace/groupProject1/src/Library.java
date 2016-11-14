@@ -62,7 +62,7 @@ public class Library implements Serializable {
 	private static Library library;
 
 	/**
-	 * Private for the singleton pattern Creates the catalog and member
+	 * Private constructor for the singleton pattern Creates the catalog and member
 	 * collection objects
 	 */
 	private Library() {
@@ -126,7 +126,12 @@ public class Library implements Serializable {
 		}
 		return null;
 	}
-
+/**
+ * Method for removing a meember
+ * 
+ * @param memSeqNum
+ * @return int corresponding to a list of conditionals
+ */
 	public int removeMember(int memSeqNum) {
 		Iterator<Member> memIterator = memberList.iterator();
 		Member member = null;
@@ -222,7 +227,12 @@ public class Library implements Serializable {
 	public Member searchMembership(String memberId) {
 		return memberList.search(memberId);
 	}
-
+/**
+ * Processes holds for a given book
+ * 
+ * @param bookSeqNum
+ * @return true iff the item's hold can be processed 
+ */
 	public Member processHold(int bookSeqNum) {
 		Iterator<Book> item = catalog.getBooksWithHolds();
 		LoanableItem heldItem = null;
@@ -447,7 +457,12 @@ public class Library implements Serializable {
 			return (member.getLoanableItemsIssued());
 		}
 	}
-
+/**
+ * Method to remove item from library
+ * 
+ * @param bookSeqNum
+ * @return true iff the item was removed from the list 
+ */
 	public int removeLoanableItems(int bookSeqNum) {
 		Iterator<LoanableItem> bookIterator = catalog.getBooksNotBorrowed();
 
@@ -462,7 +477,7 @@ public class Library implements Serializable {
 	}
 
 	/**
-	 * Removes a specific book from the catalog
+	 * Removes a specific item from the catalog
 	 * 
 	 * @param itemId
 	 *            id of the item
@@ -739,16 +754,30 @@ public class Library implements Serializable {
 		}
 		return catalog.getBooksWithHolds();
 	}
-
+/**
+ * Getter for list of books not borrowed
+ * 
+ * @return list of books not borrowed
+ */
 	public Iterator<LoanableItem> getBooksNotBorrowed() {
 		return catalog.getBooksNotBorrowed();
 	}
-
+/**
+ * Getter for list of overdue items	
+ * 
+ * @return list of overdue items
+ */
 	public Iterator<LoanableItem> getOverDueItems() {
 		return catalog.getOverDueItems();
 
 	}
-
+/**
+ * Sets a due date for a given item
+ * 
+ * @param itemSeqNum
+ * @param dueDate
+ * @return string representation of the due date for the item
+ */
 	public String setDueDate(int itemSeqNum, Calendar dueDate) {
 		Iterator<LoanableItem> borrowedItems = catalog.getCheckedOutItem();
 		LoanableItem item = null;
@@ -760,7 +789,12 @@ public class Library implements Serializable {
 		return item.setDueDate(dueDate);
 
 	}
-
+/**
+ * Method to move a book from the regular library system to the 
+ * reserved book section
+ * 
+ * @param bookID
+ */
 	public void moveToReserved(String bookID) {
 		Book book = (Book) catalog.search(bookID);
 		catalog.remove(book);

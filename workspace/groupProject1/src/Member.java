@@ -1,3 +1,4 @@
+
 /**
  * 
  * @author Brahma Dathan and Sarnath Ramnath
@@ -85,15 +86,14 @@ public class Member implements Serializable, Matchable<String> {
 	 */
 	public boolean returnBook(Book book) {
 		if (itemsBorrowed.remove(book)) {
-			transactions
-					.add(new Transaction("Book returned ", book.getTitle()));
+			transactions.add(new Transaction("Book returned ", book.getTitle()));
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Marks the book as renewe
+	 * Marks the book as renewed
 	 * 
 	 * @param book
 	 *            the book to be renewed
@@ -101,13 +101,11 @@ public class Member implements Serializable, Matchable<String> {
 	 */
 	public boolean renew(LoanableItem item) {
 
-		for (ListIterator<LoanableItem> iterator = itemsBorrowed.listIterator(); iterator
-				.hasNext();) {
+		for (ListIterator<LoanableItem> iterator = itemsBorrowed.listIterator(); iterator.hasNext();) {
 			Book aBook = (Book) iterator.next();
 			String id = aBook.getId();
 			if (id.equals(item.getId())) {
-				transactions.add(new Transaction("Book renewed ", item
-						.getTitle()));
+				transactions.add(new Transaction("Book renewed ", item.getTitle()));
 				return true;
 			}
 		}
@@ -132,7 +130,12 @@ public class Member implements Serializable, Matchable<String> {
 		return (booksOnHold.listIterator());
 	}
 
-	public Boolean hasHolds() {
+	/**
+	 * Checks if the member had holds on any books
+	 * 
+	 * @return true iff the member has no holds
+	 */
+	public boolean hasHolds() {
 		if (booksOnHold.size() == 0) {
 			return false;
 
@@ -147,8 +150,7 @@ public class Member implements Serializable, Matchable<String> {
 	 *            the book to be placed a hold
 	 */
 	public void placeHold(Hold hold) {
-		transactions.add(new Transaction("Hold Placed ", hold.getBook()
-				.getTitle()));
+		transactions.add(new Transaction("Hold Placed ", hold.getBook().getTitle()));
 		booksOnHold.add(hold);
 	}
 
@@ -160,13 +162,11 @@ public class Member implements Serializable, Matchable<String> {
 	 * @return true iff the hold could be removed
 	 */
 	public boolean removeHold(String bookId) {
-		for (ListIterator<Hold> iterator = booksOnHold.listIterator(); iterator
-				.hasNext();) {
+		for (ListIterator<Hold> iterator = booksOnHold.listIterator(); iterator.hasNext();) {
 			Hold hold = iterator.next();
 			String id = hold.getBook().getId();
 			if (id.equals(bookId)) {
-				transactions.add(new Transaction("Hold Removed ", hold
-						.getBook().getTitle()));
+				transactions.add(new Transaction("Hold Removed ", hold.getBook().getTitle()));
 				iterator.remove();
 				return true;
 			}
@@ -183,8 +183,7 @@ public class Member implements Serializable, Matchable<String> {
 	 */
 	public Iterator<Transaction> getTransactions(Calendar date) {
 		List<Transaction> result = new LinkedList<Transaction>();
-		for (Iterator<Transaction> iterator = transactions.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<Transaction> iterator = transactions.iterator(); iterator.hasNext();) {
 			Transaction transaction = iterator.next();
 			if (transaction.onDate(date)) {
 				result.add(transaction);
@@ -229,10 +228,20 @@ public class Member implements Serializable, Matchable<String> {
 		return id;
 	}
 
+	/**
+	 * Getter for the list of holds a member may have
+	 * 
+	 * @return the list of holds
+	 */
 	public List<Hold> getListOfHolds() {
 		return booksOnHold;
 	}
 
+	/**
+	 * Getter for the list of books borrowed
+	 * 
+	 * @return the list of items borrowed by a member
+	 */
 	public List<LoanableItem> getListOfBooks() {
 		return itemsBorrowed;
 	}
@@ -284,14 +293,11 @@ public class Member implements Serializable, Matchable<String> {
 	 */
 	@Override
 	public String toString() {
-		String string = "Member name " + name + " address " + address + " id "
-				+ id + "phone " + phone;
+		String string = "Member name " + name + " address " + address + " id " + id + "phone " + phone;
 		string += " borrowed: [";
-		for (Iterator<LoanableItem> iterator = itemsBorrowed.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<LoanableItem> iterator = itemsBorrowed.iterator(); iterator.hasNext();) {
 			LoanableItem item = iterator.next();
-			if (item instanceof Book || item instanceof DVD
-					|| item instanceof Periodical) {
+			if (item instanceof Book || item instanceof DVD || item instanceof Periodical) {
 				string += " " + item.getTitle();
 			}
 			if (item instanceof DigitalCamera) {
@@ -305,14 +311,12 @@ public class Member implements Serializable, Matchable<String> {
 		}
 
 		string += "] holds: [";
-		for (Iterator<Hold> iterator = booksOnHold.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<Hold> iterator = booksOnHold.iterator(); iterator.hasNext();) {
 			Hold hold = iterator.next();
 			string += " " + hold.getBook().getTitle();
 		}
 		string += "] transactions: [";
-		for (Iterator<Transaction> iterator = transactions.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<Transaction> iterator = transactions.iterator(); iterator.hasNext();) {
 			string += iterator.next();
 		}
 		string += "]";
@@ -352,6 +356,11 @@ public class Member implements Serializable, Matchable<String> {
 		return true;
 	}
 
+	/**
+	 * Getter for getting the list of books issued with holds
+	 * 
+	 * @return the list of books issued with holds
+	 */
 	public Iterator<LoanableItem> getBooksIssuedWithHolds() {
 		List<LoanableItem> booksWithHolds = new LinkedList<LoanableItem>();
 		Iterator<LoanableItem> iterator = itemsBorrowed.iterator();
@@ -369,6 +378,11 @@ public class Member implements Serializable, Matchable<String> {
 
 	}
 
+	/**
+	 * Method to see if a member has fines
+	 * 
+	 * @return true iff the member has fines associated with their membership
+	 */
 	public boolean hasFines() {
 		if (fine > 0) {
 			return true;
@@ -376,6 +390,12 @@ public class Member implements Serializable, Matchable<String> {
 		return false;
 	}
 
+	/**
+	 * Method to check if a member is removable from the library system
+	 * 
+	 * @param member
+	 * @return true iff the member has no fines and/or no holds placed
+	 */
 	public boolean isRemovable(Member member) {
 
 		if (member.hasHolds() || member.hasFines()) {
@@ -386,6 +406,11 @@ public class Member implements Serializable, Matchable<String> {
 
 	}
 
+	/**
+	 * Method to see if the member has a reserved book
+	 * 
+	 * @return true iff the member has a reserved book
+	 */
 	public boolean hasReservedBook() {
 		Iterator<LoanableItem> borrowedItems = itemsBorrowed.iterator();
 		while (borrowedItems.hasNext()) {
@@ -396,6 +421,11 @@ public class Member implements Serializable, Matchable<String> {
 		return false;
 	}
 
+	/**
+	 * Method to see if the member has a digital camera borrowed
+	 * 
+	 * @return true iff the member has a camera borrowed
+	 */
 	public boolean hasCamera() {
 		Iterator<LoanableItem> borrowedItems = itemsBorrowed.iterator();
 		while (borrowedItems.hasNext()) {

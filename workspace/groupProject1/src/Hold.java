@@ -1,8 +1,9 @@
+
 /**
  * 
  * @author Brahma Dathan and Sarnath Ramnath
  * @Copyright (c) 2010
- 
+
  * Redistribution and use with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -89,6 +90,11 @@ public class Hold implements Serializable {
 		return (System.currentTimeMillis() < date.getTimeInMillis());
 	}
 
+	/**
+	 * Getter for the book object
+	 * 
+	 * @return the book object
+	 */
 	public LoanableItem getBook() {
 		return loanableItem;
 	}
