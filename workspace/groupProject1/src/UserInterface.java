@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
  * number of utility methods exist to make it easier to parse the input.
  * 
  */
-public class UserInterface {
+public class UserInterface implements LoanableItemVisitor {
 	private static UserInterface userInterface;
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(
 			System.in));
@@ -572,7 +572,7 @@ public class UserInterface {
 
 		if (memSeqNum != -1) {
 
-			Iterator<LoanableItem> books = library.getBorrowedBooks();
+			Iterator<LoanableItem> books = library.getBorrowedItems();
 			bookSeqNum = getSeqNum(books);
 
 			if (bookSeqNum != -1) {
@@ -846,15 +846,11 @@ public class UserInterface {
 	}
 
 	private void getOverDueItems() {
-		Iterator<LoanableItem> overDueItems = library.getOverDueItems();
-		while (overDueItems.hasNext()) {
-			System.out.println(overDueItems.next());
-		}
-
+		visit(library);
 	}
 
 	private void setDueDate() {
-		Iterator<LoanableItem> items = library.getBorrowedBooks();
+		Iterator<LoanableItem> items = library.getBorrowedItems();
 		int itemSeqNum = getSeqNum(items);
 		if (itemSeqNum == -1) {
 			return;
@@ -878,5 +874,61 @@ public class UserInterface {
 	 */
 	public static void main(String[] args) {
 		UserInterface.instance().process();
+	}
+
+	public void visit(ItemList itemList) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Book book) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(DVD dvd) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Periodical periodical) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Laptop laptop) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(DigitalCamera digitalCamera) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Catalog catalog) {
+		// TODO Auto-generated method stub
+	}
+
+	public void visit(MemberList memberlist) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Member member) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Library library) {
+		Iterator<LoanableItem> borrowedItems = library.getBorrowedItems();
+		System.out.println("The following items are overdue");
+		while (borrowedItems.hasNext()) {
+			LoanableItem item = borrowedItems.next();
+			if (item.isOverdue()) {
+				System.out.println(item);
+			}
+		}
+
 	}
 }

@@ -419,4 +419,8 @@ public class Member implements Serializable, Matchable<String> {
 		}
 		return false;
 	}
+
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
+	}
 }

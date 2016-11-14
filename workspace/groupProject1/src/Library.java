@@ -578,11 +578,12 @@ public class Library implements Serializable {
 		return member.getTransactions(date);
 	}
 
-	/*
-	 * public void processLoanableItems(LoanableItemVisitor visitor) { for
-	 * (Iterator<LoanableItem> itemIterator = catalog.iterator(); itemIterator
-	 * .hasNext();) { itemIterator.next().accept(visitor); } }
-	 */
+	public void processLoanableItems(LoanableItemVisitor visitor) {
+		for (Iterator<LoanableItem> itemIterator = catalog.iterator(); itemIterator
+				.hasNext();) {
+			itemIterator.next().accept(visitor);
+		}
+	}
 
 	/**
 	 * Retrieves a deserialized version of the library from disk
@@ -751,7 +752,7 @@ public class Library implements Serializable {
 	 * @return books that are currently borrowed.
 	 */
 
-	public Iterator<LoanableItem> getBorrowedBooks() {
+	public Iterator<LoanableItem> getBorrowedItems() {
 		return catalog.getCheckedOutItem();
 	}
 
@@ -770,6 +771,9 @@ public class Library implements Serializable {
 	}
 
 	public Iterator<LoanableItem> getItemsNotBorrowed() {
+		// Iterator<LoanableItem> items = catalog.getItemsNotBorrowed();
+		// while(reserved.hasNext()){
+		// }
 		return catalog.getItemsNotBorrowed();
 	}
 

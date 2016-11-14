@@ -147,4 +147,8 @@ public class MemberList extends ItemList<Member, String> {
 		return iterator();
 	}
 
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
+	}
+
 }

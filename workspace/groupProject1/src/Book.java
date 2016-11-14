@@ -95,10 +95,11 @@ public class Book extends LoanableItem implements Serializable,
 	 * @param visitor
 	 *            the Visitor that will process the Book object
 	 */
-	// @Override
-	// public void accept(LoanableItemVisitor visitor) {
-	// visitor.visit(this);
-	// }
+	@Override
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
+	}
+
 	public void placeHold(Hold hold) {
 		super.placeHold(hold);
 	}

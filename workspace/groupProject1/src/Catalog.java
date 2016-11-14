@@ -195,4 +195,8 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		return super.search(itemId);
 	}
 
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
+	}
+
 }

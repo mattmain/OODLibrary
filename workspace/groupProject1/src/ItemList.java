@@ -95,4 +95,7 @@ public class ItemList<T extends Matchable<K>, K> implements Serializable {
 		return list.iterator();
 	}
 
+	public void accept(LoanableItemVisitor visitor) {
+		visitor.visit(this);
+	}
 }
