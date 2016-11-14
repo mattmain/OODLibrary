@@ -49,7 +49,9 @@ public class PrintFormat implements LoanableItemVisitor {
 	 * object's string representation.
 	 */
 	public void visit(LoanableItem item) {
-		System.out.println("Print " + item + " formatted");
+		if (item.isOverdue()) {
+			System.out.println("Print " + item + " formatted");
+		}
 	}
 
 	/**
@@ -74,6 +76,36 @@ public class PrintFormat implements LoanableItemVisitor {
 
 	public void visit(Laptop laptop) {
 		System.out.println("Print " + laptop + " formatted");
+	}
+
+	public void visit(ItemList itemList) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(DigitalCamera digitalCamera) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Catalog catalog) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(MemberList memberlist) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Member member) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visit(Library library) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

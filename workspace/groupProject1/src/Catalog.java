@@ -145,21 +145,16 @@ public class Catalog extends ItemList<LoanableItem, String> {
 
 		return booksWithHolds.iterator();
 	}
-<<<<<<< HEAD
-/**
- * Gets books that are not borrowed
- * 
- * @return books that are not borrowed
- */
-	public Iterator<LoanableItem> getBooksNotBorrowed() {
-		Iterator<LoanableItem> books = iterator();
-		List<LoanableItem> booksNotBorrowed = new LinkedList<LoanableItem>();
-=======
+
+	/**
+	 * Gets books that are not borrowed
+	 * 
+	 * @return books that are not borrowed
+	 */
 
 	public Iterator<LoanableItem> getItemsNotBorrowed() {
 		Iterator<LoanableItem> items = iterator();
 		List<LoanableItem> itemsNotBorrowed = new LinkedList<LoanableItem>();
->>>>>>> 51f394e4184b9afa41548735cc7c093c619dec92
 
 		while (items.hasNext()) {
 
@@ -173,11 +168,12 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		return itemsNotBorrowed.iterator();
 
 	}
-/**
- *  Gets the overdue items
- *
- * @return the overdue items
- */
+
+	/**
+	 * Gets the overdue items
+	 * 
+	 * @return the overdue items
+	 */
 	public Iterator<LoanableItem> getOverDueItems() {
 		Iterator<LoanableItem> checkedOutItems = getCheckedOutItem();
 		List<LoanableItem> overDueItems = new LinkedList<LoanableItem>();
@@ -189,11 +185,12 @@ public class Catalog extends ItemList<LoanableItem, String> {
 		}
 		return overDueItems.iterator();
 	}
-/**
- * Gets the checked out items
- * 
- * @return the checked out items
- */
+
+	/**
+	 * Gets the checked out items
+	 * 
+	 * @return the checked out items
+	 */
 	public Iterator<LoanableItem> getCheckedOutItem() {
 		Iterator<LoanableItem> items = iterator();
 		List<LoanableItem> borrowedItems = new LinkedList<LoanableItem>();

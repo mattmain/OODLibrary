@@ -64,8 +64,8 @@ public class Library implements Serializable {
 	private static Library library;
 
 	/**
-	 * Private constructor for the singleton pattern Creates the catalog and member
-	 * collection objects
+	 * Private constructor for the singleton pattern Creates the catalog and
+	 * member collection objects
 	 */
 	private Library() {
 		catalog = Catalog.instance();
@@ -128,12 +128,13 @@ public class Library implements Serializable {
 		}
 		return null;
 	}
-/**
- * Method for removing a meember
- * 
- * @param memSeqNum
- * @return int corresponding to a list of conditionals
- */
+
+	/**
+	 * Method for removing a meember
+	 * 
+	 * @param memSeqNum
+	 * @return int corresponding to a list of conditionals
+	 */
 	public int removeMember(int memSeqNum) {
 		Iterator<Member> memIterator = memberList.iterator();
 		Member member = null;
@@ -236,12 +237,13 @@ public class Library implements Serializable {
 	public Member searchMembership(String memberId) {
 		return memberList.search(memberId);
 	}
-/**
- * Processes holds for a given book
- * 
- * @param bookSeqNum
- * @return true iff the item's hold can be processed 
- */
+
+	/**
+	 * Processes holds for a given book
+	 * 
+	 * @param bookSeqNum
+	 * @return true iff the item's hold can be processed
+	 */
 	public Member processHold(int bookSeqNum) {
 		Iterator<Book> item = catalog.getBooksWithHolds();
 		LoanableItem heldItem = null;
@@ -484,12 +486,13 @@ public class Library implements Serializable {
 			return (member.getLoanableItemsIssued());
 		}
 	}
-/**
- * Method to remove item from library
- * 
- * @param bookSeqNum
- * @return true iff the item was removed from the list 
- */
+
+	/**
+	 * Method to remove item from library
+	 * 
+	 * @param bookSeqNum
+	 * @return true iff the item was removed from the list
+	 */
 	public int removeLoanableItems(int bookSeqNum) {
 		Iterator<LoanableItem> itemIterator = getItemsNotBorrowed();
 
@@ -784,45 +787,36 @@ public class Library implements Serializable {
 		}
 		return catalog.getBooksWithHolds();
 	}
-<<<<<<< HEAD
-/**
- * Getter for list of books not borrowed
- * 
- * @return list of books not borrowed
- */
-	public Iterator<LoanableItem> getBooksNotBorrowed() {
-		return catalog.getBooksNotBorrowed();
-=======
+
+	/**
+	 * Getter for list of books not borrowed
+	 * 
+	 * @return list of books not borrowed
+	 */
 
 	public Iterator<LoanableItem> getItemsNotBorrowed() {
-		// Iterator<LoanableItem> items = catalog.getItemsNotBorrowed();
-		// while(reserved.hasNext()){
-		// }
 		return catalog.getItemsNotBorrowed();
->>>>>>> 51f394e4184b9afa41548735cc7c093c619dec92
 	}
-/**
- * Getter for list of overdue items	
- * 
- * @return list of overdue items
- */
+
+	/**
+	 * Getter for list of overdue items
+	 * 
+	 * @return list of overdue items
+	 */
 	public Iterator<LoanableItem> getOverDueItems() {
 		return catalog.getOverDueItems();
 
 	}
-<<<<<<< HEAD
-/**
- * Sets a due date for a given item
- * 
- * @param itemSeqNum
- * @param dueDate
- * @return string representation of the due date for the item
- */
-	public String setDueDate(int itemSeqNum, Calendar dueDate) {
-=======
+
+	/**
+	 * Sets a due date for a given item
+	 * 
+	 * @param itemSeqNum
+	 * @param dueDate
+	 * @return string representation of the due date for the item
+	 */
 
 	public int setDueDate(int itemSeqNum, Calendar dueDate) {
->>>>>>> 51f394e4184b9afa41548735cc7c093c619dec92
 		Iterator<LoanableItem> borrowedItems = catalog.getCheckedOutItem();
 		LoanableItem item = null;
 
@@ -836,18 +830,15 @@ public class Library implements Serializable {
 		return item.setDueDate(dueDate);
 
 	}
-<<<<<<< HEAD
-/**
- * Method to move a book from the regular library system to the 
- * reserved book section
- * 
- * @param bookID
- */
-	public void moveToReserved(String bookID) {
-=======
+
+	/**
+	 * Method to move a book from the regular library system to the reserved
+	 * book section
+	 * 
+	 * @param bookID
+	 */
 
 	public int moveToReserved(String bookID) {
->>>>>>> 51f394e4184b9afa41548735cc7c093c619dec92
 		Book book = (Book) catalog.search(bookID);
 		if (book == null) {
 			return BOOK_NOT_FOUND;

@@ -105,4 +105,12 @@ public interface LoanableItemVisitor {
 	 *            the library to be processed
 	 */
 	public void visit(Library library);
+
+	/**
+	 * The method processes LoanableItem objects
+	 * 
+	 * @param periodical
+	 *            the LoanableItem to be processed
+	 */
+	public void visit(LoanableItem loanableItem);
 }
