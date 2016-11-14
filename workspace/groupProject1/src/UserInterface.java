@@ -1,8 +1,9 @@
+
 /**
  * 
  * @author Brahma Dathan and Sarnath Ramnath
  * @Copyright (c) 2010
- 
+
  * Redistribution and use with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -36,15 +37,14 @@ import java.util.StringTokenizer;
  */
 public class UserInterface {
 	private static UserInterface userInterface;
-	private BufferedReader reader = new BufferedReader(new InputStreamReader(
-			System.in));
+	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static Library library;
 	private static final int EXIT = 0;
 	private static final int ADD_MEMBER = 1;
-	private static final int ADD_ITEMS = 2;
-	private static final int ISSUE_ITEMS = 3;
+	private static final int ADD_BOOKS = 2;
+	private static final int ISSUE_BOOKS = 3;
 	private static final int RETURN_ITEMS = 4;
-	private static final int RENEW_ITEMS = 5;
+	private static final int RENEW_BOOKS = 5;
 	private static final int REMOVE_ITEMS = 6;
 	private static final int PLACE_HOLD = 7;
 	private static final int REMOVE_HOLD = 8;
@@ -53,11 +53,11 @@ public class UserInterface {
 	private static final int SAVE = 11;
 	private static final int RETRIEVE = 12;
 	private static final int PRINT_FORMATTED = 13;
-	private static final int REMOVE_MEMBER = 14;
 	private static final int GET_OVERDUE_ITEMS = 15;
 	private static final int SET_DUE_DATE = 16;
 	private static final int MOVE_TO_RESERVED = 17;
 	private static final int HELP = 18;
+	private static final int REMOVE_MEMBER = 14;
 
 	/**
 	 * Made private for singleton pattern. Conditionally looks for any saved
@@ -116,8 +116,7 @@ public class UserInterface {
 	 * 
 	 */
 	private boolean yesOrNo(String prompt) {
-		String more = getToken(prompt
-				+ " (Y|y)[es] or anything else for no  -1 for no and to get to main menu");
+		String more = getToken(prompt + " (Y|y)[es] or anything else for no  -1 for no and to get to main menu");
 
 		if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
 			return false;
@@ -161,8 +160,7 @@ public class UserInterface {
 			try {
 				Calendar date = new GregorianCalendar();
 				String item = getToken(prompt);
-				DateFormat dateFormat = SimpleDateFormat
-						.getDateInstance(DateFormat.SHORT);
+				DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.SHORT);
 				date.setTime(dateFormat.parse(item));
 				return date;
 			} catch (Exception fe) {
@@ -180,8 +178,7 @@ public class UserInterface {
 	public int getCommand() {
 		do {
 			try {
-				int value = Integer.parseInt(getToken("Enter command:" + HELP
-						+ " for help"));
+				int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
 				if (value >= EXIT && value <= HELP) {
 					return value;
 				}
@@ -196,14 +193,13 @@ public class UserInterface {
 	 * 
 	 */
 	public void help() {
-		System.out
-				.println("Enter a number between 0 and 18 as explained below:");
+		System.out.println("Enter a number between 0 and 18 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
 		System.out.println(ADD_MEMBER + " to add a member");
-		System.out.println(ADD_ITEMS + " to  add books");
-		System.out.println(ISSUE_ITEMS + " to  issue books to a  member");
+		System.out.println(ADD_BOOKS + " to  add books");
+		System.out.println(ISSUE_BOOKS + " to  issue books to a member");
 		System.out.println(RETURN_ITEMS + " to  return books ");
-		System.out.println(RENEW_ITEMS + " to  renew books ");
+		System.out.println(RENEW_BOOKS + " to  renew books ");
 		System.out.println(REMOVE_ITEMS + " to  remove items");
 		System.out.println(PLACE_HOLD + " to  place a hold on a book");
 		System.out.println(REMOVE_HOLD + " to  remove a hold on a book");
@@ -213,8 +209,7 @@ public class UserInterface {
 		System.out.println(RETRIEVE + " to  retrieve");
 		System.out.println(PRINT_FORMATTED + " to  print items formatted");
 		System.out.println(REMOVE_MEMBER + " to remove a member");
-		System.out.println(GET_OVERDUE_ITEMS
-				+ "  to print list of overdue items");
+		System.out.println(GET_OVERDUE_ITEMS + "  to print list of overdue items");
 		System.out.println(SET_DUE_DATE + "  to chage the due date of an item");
 		System.out.println(HELP + " for help");
 	}
@@ -237,6 +232,11 @@ public class UserInterface {
 		System.out.println(result);
 	}
 
+	/**
+	 * Method to be called when the user wants to remove a member. Prompts user
+	 * for the appropriate values and then the appropriate Library method for
+	 * removing the member
+	 */
 	public void removeMember() {
 		int memSeqNum = 0;
 		do {
@@ -280,58 +280,25 @@ public class UserInterface {
 	 * 
 	 */
 	public void addLoanableItems() {
-		LoanableItem result = null;
-		String brand = null;
-		String id = null;
-		String author = null;
-		String title = null;
+		LoanableItem result;
 		do {
 			int type;
-			// do {
-			type = getNumber("Enter:\n" + Library.BOOK + " for book \n"
-					+ Library.PERIODICAL + " for periodical \n" + Library.DVD
-					+ " for dvd \n" + Library.CAMERA + " for camera \n"
-					+ Library.LAPTOP + " for laptop");
-			// } //while (type != Library.BOOK && type != Library.PERIODICAL);
+			do {
+				type = getNumber("Enter " + Library.BOOK + " for book or " + Library.PERIODICAL + " for periodical");
+			} while (type != Library.BOOK && type != Library.PERIODICAL);
+			String title = getToken("Enter title");
+			String author = "";
 			if (type == Library.BOOK) {
 				author = getToken("Enter author");
-				title = getToken("Enter title");
-				id = getToken("Enter id");
-				result = library
-						.addLoanableItem(type, title, author, id, brand);
 			}
-			if (type == Library.PERIODICAL) {
-				title = getToken("Enter title");
-				id = getToken("Enter id");
-				result = library
-						.addLoanableItem(type, title, author, id, brand);
-			}
-			if (type == Library.DVD) {
-				title = getToken("Enter title");
-				id = getToken("Enter id");
-				result = library
-						.addLoanableItem(type, title, author, id, brand);
-			}
-			if (type == Library.CAMERA) {
-				brand = getToken("Enter brand");
-				id = getToken("Enter id");
-				result = library
-						.addLoanableItem(type, title, author, id, brand);
-			}
-			if (type == Library.LAPTOP) {
-				title = getToken("Enter title");
-				id = getToken("Enter id");
-				result = library
-						.addLoanableItem(type, title, author, id, brand);
-
-			}
-
+			String id = getToken("Enter id");
+			result = library.addLoanableItem(type, title, author, id);
 			if (result != null) {
 				System.out.println(result);
 			} else {
-				System.out.println("Item could not be added");
+				System.out.println("Book could not be added");
 			}
-			if (!yesOrNo("Add more items?")) {
+			if (!yesOrNo("Add more books?")) {
 				break;
 			}
 		} while (true);
@@ -363,16 +330,21 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * This is method to take in the number sequence when getting information
+	 * from one of the list involved in our library system
+	 * 
+	 * @param iterator
+	 * @return the int value corresponding to the list displayed
+	 */
 	public int getSeqNum(Iterator iterator) {
 		int seqNum = 0;
 		while (iterator.hasNext()) {
-			System.out.println("Seq Num: " + seqNum + " "
-					+ iterator.next().toString());
+			System.out.println("Seq Num: " + seqNum + " " + iterator.next().toString());
 			seqNum++;
 		}
 		try {
-			seqNum = Integer
-					.parseInt(getToken("Enter Sequence Number or -1 to cancel."));
+			seqNum = Integer.parseInt(getToken("Enter Sequence Number or -1 to cancel."));
 		} catch (Exception e) {
 			System.out.println("You did not enter a number");
 		}
@@ -397,8 +369,7 @@ public class UserInterface {
 		if (memSeqNum != -1) {
 
 			do {
-				Iterator<LoanableItem> issuedItems = library
-						.getBooksIssued(memSeqNum);
+				Iterator<LoanableItem> issuedItems = library.getBooksIssued(memSeqNum);
 				bookSeqNum = getSeqNum(issuedItems);
 
 				if (bookSeqNum == -1) {
@@ -541,8 +512,7 @@ public class UserInterface {
 					System.out.println("A hold has been placed");
 					break;
 				case Library.NO_BOOK_CHECKED_OUT:
-					System.out
-							.println("There are no books checked out so a hold cannot be placed.");
+					System.out.println("There are no books checked out so a hold cannot be placed.");
 					break;
 				default:
 					System.out.println("An error has occurred");
@@ -571,8 +541,7 @@ public class UserInterface {
 		memSeqNum = getSeqNum(members);
 		if (memSeqNum != -1) {
 
-			Iterator<LoanableItem> books = library
-					.getBooksIssuedWithHolds(memSeqNum);
+			Iterator<LoanableItem> books = library.getBooksIssuedWithHolds(memSeqNum);
 			bookSeqNum = getSeqNum(books);
 			if (bookSeqNum != -1) {
 
@@ -651,8 +620,7 @@ public class UserInterface {
 			} else {
 				while (result.hasNext()) {
 					Transaction transaction = result.next();
-					System.out.println(transaction.getType() + "   "
-							+ transaction.getTitle() + "\n");
+					System.out.println(transaction.getType() + "   " + transaction.getTitle() + "\n");
 				}
 				System.out.println("\n  There are no more transactions \n");
 			}
@@ -666,8 +634,7 @@ public class UserInterface {
 	 */
 	private void save() {
 		if (Library.save()) {
-			System.out
-					.println(" The library has been successfully saved in the file LibraryData \n");
+			System.out.println(" The library has been successfully saved in the file LibraryData \n");
 		} else {
 			System.out.println(" There has been an error in saving \n");
 		}
@@ -682,8 +649,7 @@ public class UserInterface {
 		try {
 			Library tempLibrary = Library.retrieve();
 			if (tempLibrary != null) {
-				System.out
-						.println(" The library has been successfully retrieved from the file LibraryData \n");
+				System.out.println(" The library has been successfully retrieved from the file LibraryData \n");
 				library = tempLibrary;
 			} else {
 				System.out.println("File doesnt exist; creating new library");
@@ -717,10 +683,10 @@ public class UserInterface {
 			case ADD_MEMBER:
 				addMember();
 				break;
-			case ADD_ITEMS:
+			case ADD_BOOKS:
 				addLoanableItems();
 				break;
-			case ISSUE_ITEMS:
+			case ISSUE_BOOKS:
 				issueLoanableItems();
 				break;
 			case RETURN_ITEMS:
@@ -729,7 +695,7 @@ public class UserInterface {
 			case REMOVE_ITEMS:
 				removeLoanableItems();
 				break;
-			case RENEW_ITEMS:
+			case RENEW_BOOKS:
 				renewLoanableItems();
 				break;
 			case PLACE_HOLD:
@@ -770,23 +736,33 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * Method to be called to move books to the reserved area. Uses appropriate
+	 * method from library to complete this operation
+	 */
 	private void moveToReserved() {
 		Iterator<LoanableItem> books = library.getBooks();
-		String bookID = null;
+		int bookID = -1;
 		while (books.hasNext()) {
 			System.out.println(books.toString());
 		}
 
 		try {
-			bookID = getToken("Enter an ID of a book to move or -1 to cancel.");
+			bookID = Integer.parseInt(getToken("Enter an ID of a book to move or -1 to cancel."));
 		} catch (Exception e) {
 			System.out.println("You did not enter a number");
 		}
-		library.moveToReserved(bookID);
-		System.out.println("Book has been moved to the reserved section");
+
+		String result = library.moveToReserved(bookID);
+
+		System.out.println(result);
 
 	}
 
+	/**
+	 * Getter for list of overdue items. Uses appropriate Library method get the
+	 * list.
+	 */
 	private void getOverDueItems() {
 		Iterator<LoanableItem> overDueItems = library.getOverDueItems();
 		while (overDueItems.hasNext()) {
@@ -795,6 +771,10 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Setter for the due date. Uses appropriate Library method to set the due
+	 * date.
+	 */
 	private void setDueDate() {
 		Iterator<LoanableItem> items = library.getBorrowedBooks();
 		int itemSeqNum = getSeqNum(items);
