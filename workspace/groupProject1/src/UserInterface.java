@@ -216,6 +216,8 @@ public class UserInterface {
 		System.out.println(GET_OVERDUE_ITEMS
 				+ "  to print list of overdue items");
 		System.out.println(SET_DUE_DATE + "  to chage the due date of an item");
+		System.out.println(MOVE_TO_RESERVED
+				+ "  to move item to the reserved section");
 		System.out.println(HELP + " for help");
 	}
 
@@ -249,15 +251,16 @@ public class UserInterface {
 				process();
 			}
 			if (result == Library.MEMBER_NOT_FOUND) {
-				System.out.println("MEMBER_NOT_FOUND");
+				System.out.println("Unable to remove member: MEMBER_NOT_FOUND");
 				removeMember();
 			}
 			if (result == Library.MEMBER_HAS_HOLD) {
-				System.out.println("MEMBER_HAS_HOLD");
+				System.out
+						.println("Unable to remove member: MEMBER_HAS_HOLD or MEMBER_HAS_ITEM");
 				removeMember();
 			}
 			if (result == Library.MEMBER_HAS_FINES) {
-				System.out.println("MEMBER_HAS_FINES");
+				System.out.println("Unable to remove member: MEMBER_HAS_FINES");
 				removeMember();
 			}
 			if (result == Library.OPERATION_COMPLETED) {
@@ -385,12 +388,24 @@ public class UserInterface {
 				if (result == Library.BOOK_NOT_FOUND) {
 					System.out.println("Invalid Item Sequence number entered");
 				}
+				if (result == Library.MEMBER_HAS_FINES) {
+					if (yesOrNo("Would member like to pay fines?")) {
+						payFines(memSeqNum);
+					}
+				}
 
 				if (!yesOrNo("issue more books?")) {
 					break;
 				}
 			}
 		} while (true);
+	}
+
+	private void payFines(int memSeqNum) {
+
+		double amount = getNumber("Please enter the amount paid");
+		double result = library.payFines(memSeqNum, amount);
+		System.out.println("The member has " + result + " in fines remaining");
 	}
 
 	public int getSeqNum(Iterator iterator) {
@@ -471,16 +486,16 @@ public class UserInterface {
 				System.out.println("No such Book in Library");
 				break;
 			case Library.ITEM_NOT_ISSUED:
-				System.out.println(" Item was not checked out");
+				System.out.println("Item was not checked out");
 				break;
 			case Library.ITEM_HAS_HOLD:
-				System.out.println("Book has a hold");
+				System.out.println("Item has a hold");
 				break;
 			case Library.OPERATION_FAILED:
-				System.out.println("Book could not be returned");
+				System.out.println("Item could not be returned");
 				break;
 			case Library.OPERATION_COMPLETED:
-				System.out.println(" Book has been returned");
+				System.out.println("Item has been returned");
 				break;
 			default:
 				System.out.println("An error has occurred");
@@ -799,10 +814,10 @@ public class UserInterface {
 			case SET_DUE_DATE:
 				setDueDate();
 				break;
-			case MOVE_TO_RESERVED:
-				moveToReserved();
 			case REMOVE_MEMBER:
 				removeMember();
+			case MOVE_TO_RESERVED:
+				moveToReserved();
 			case HELP:
 				help();
 				break;
@@ -814,16 +829,19 @@ public class UserInterface {
 		Iterator<LoanableItem> books = library.getBooks();
 		String bookID = null;
 		while (books.hasNext()) {
-			System.out.println(books.toString());
+			System.out.println(books.next().toString());
 		}
 
-		try {
-			bookID = getToken("Enter an ID of a book to move or -1 to cancel.");
-		} catch (Exception e) {
-			System.out.println("You did not enter a number");
+		bookID = getToken("Enter an ID of a book to move or -1 to cancel.");
+
+		int result = library.moveToReserved(bookID);
+		if (result == Library.BOOK_NOT_FOUND) {
+			System.out.println("Unable to find book");
 		}
-		library.moveToReserved(bookID);
-		System.out.println("Book has been moved to the reserved section");
+		if (result == Library.OPERATION_COMPLETED) {
+			System.out.println("Book has been moved to the reserved section");
+
+		}
 
 	}
 

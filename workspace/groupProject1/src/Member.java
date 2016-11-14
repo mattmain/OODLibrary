@@ -373,6 +373,10 @@ public class Member implements Serializable, Matchable<String> {
 		return false;
 	}
 
+	public double getFines() {
+		return fine;
+	}
+
 	public boolean isRemovable(Member member) {
 
 		if (member.hasHolds() || member.hasFines()) {
@@ -399,6 +403,19 @@ public class Member implements Serializable, Matchable<String> {
 			if (borrowedItems.next() instanceof DigitalCamera) {
 				return true;
 			}
+		}
+		return false;
+	}
+
+	public double payFines(double amount) {
+		this.fine = fine - amount;
+		return fine;
+
+	}
+
+	public boolean hasItem() {
+		if (this.itemsBorrowed.size() > 0) {
+			return true;
 		}
 		return false;
 	}

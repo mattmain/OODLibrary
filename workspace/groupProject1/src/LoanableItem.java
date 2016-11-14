@@ -126,7 +126,6 @@ public abstract class LoanableItem implements Serializable, Matchable<String> {
 	public Member returnItem() {
 		Member member = this.getBorrower();
 		if (member == null) {
-			System.out.println("Item was not checked out");
 			return null;
 		}
 		member.returnItem(this);

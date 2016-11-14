@@ -142,11 +142,11 @@ public class Library implements Serializable {
 		if (member == null) {
 			return (MEMBER_NOT_FOUND);
 		}
-		if (member.hasHolds()) {
-			return (MEMBER_HAS_HOLD);
+		if (member.hasHolds() || member.hasItem()) {
+			return MEMBER_HAS_HOLD;
 		}
 		if (member.hasFines()) {
-			return (MEMBER_HAS_FINES);
+			return MEMBER_HAS_FINES;
 		}
 		if (memberList.removeMember(member)) {
 			return OPERATION_COMPLETED;
@@ -351,6 +351,14 @@ public class Library implements Serializable {
 				return Library.MEMBER_NOT_FOUND;
 			}
 		}
+		if (member.getFines() > 5.00) {
+			System.out
+					.println("Member has fines exceeding $5.00 and cannot check out an item. The member currently has "
+							+ member.getFines() + " in fines.");
+			return Library.MEMBER_HAS_FINES;
+
+		}
+
 		for (int i = 0; i <= bookSeqNum; i++) {
 			if (itemIterator.hasNext()) {
 				item = (LoanableItem) itemIterator.next();
@@ -361,6 +369,7 @@ public class Library implements Serializable {
 
 		System.out.println(member.getId() + ":" + item.getId());
 		issueLoanableItem(member.getId(), item.getId());
+
 		return Library.OPERATION_COMPLETED;
 
 	}
@@ -784,10 +793,26 @@ public class Library implements Serializable {
 
 	}
 
-	public void moveToReserved(String bookID) {
+	public int moveToReserved(String bookID) {
 		Book book = (Book) catalog.search(bookID);
+		if (book == null) {
+			return BOOK_NOT_FOUND;
+		}
+
 		catalog.remove(book);
 		reservedSection.add(book);
+		return OPERATION_COMPLETED;
+	}
+
+	public double payFines(int memSeqNum, double amount) {
+		Iterator<Member> memberIterator = memberList.iterator();
+		Member member = null;
+		for (int i = 0; i <= memSeqNum; i++) {
+			member = (Member) memberIterator.next();
+		}
+		member.payFines(amount);
+
+		return member.getFines();
 	}
 
 }
